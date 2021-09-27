@@ -1,4 +1,5 @@
-<!Doctype html>
+<!doctype html>
+
 <html lang="ko">
     <head>
         <meta charset="UTF-8">
@@ -18,83 +19,16 @@
         <!-- 구글폰트 -->
         <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+
         <title>Movie LOG</title>
 
         <script>
-            function getMovies() {
-                movie_title = $('#movie_name').val()
-                alert(movie_title)
-                $.ajax({
-                    type: "GET",
-                    url: `/api/movies?movie=${movie_title}`,
-                    data: {},
-                    success: function (response) {
-                        alert(response['test']);
-                    }
-                })
-            }
+
         </script>
         <style>
-            .center {
-                text-align: center;
-            }
 
-            .star-list {
-                width: 500px;
-                margin: 20px auto 0 auto;
-            }
-
-            .wrapper {
-                /*position: absolute;*/
-                /*top: 50%;*/
-                /*left: 50%;*/
-                /*transform: translate(-50%, -50%)*/
-                width: 700px;
-                margin: 20px auto 0 auto;
-            }
-
-            #info-container {
-                width: 100%;
-                height: 100vh;
-            }
-
-            .movie-info {
-                margin: 0 auto;
-                width: 50rem;
-            }
-
-            h1 {
-                text-align: center;
-                margin: 2rem 0 4rem;
-            }
-
-            .comment-container {
-                width: 40%;
-                margin: 0 auto;
-            }
-
-            .list {
-                list-style-type: none;
-                padding: 0;
-            }
-
-            ul.list > li {
-                margin-bottom: 1rem;
-            }
-
-            .form-control {
-                width: 90%;
-            }
-
-            .review-form {
-                display: flex;
-            }
-
-            .movie-info-wrapper {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
 
         </style>
     </head>
@@ -110,107 +44,35 @@
         </section>
 
         <div class="wrapper">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="영화 이름" aria-label="Recipient's username"
-                       aria-describedby="basic-addon2" id="movie_name">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" onclick="getMovies()">검색</button>
-                </div>
-            </div>
-            <div>
-                <select class="form-select float-right" aria-label="Default select example">
-                <option selected>정렬</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                </select>
-                <br/>
-            </div>
 
-            <hr class="border-warning">
 
-            <div class="movie_list">
-                <div class="card border-info mb-3" style="max-width: 700px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="https://ssl.pstatic.net/imgmovie/mdi/mit110/0749/74977_P01_190419.jpg" class="img-fluid rounded-start" alt="...">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                            </div>
-                        </div>
+            <div id="main_page">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="영화 이름" aria-label="Recipient's username"
+                           aria-describedby="basic-addon2" id="movie_name">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" onclick="getMovies()">검색</button>
                     </div>
                 </div>
+                <div>
+                    <select class="form-select float-right" aria-label="Default select example">
+                        <option selected>정렬</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                    </select>
+                    <br/>
+                </div>
 
-                <div class="card border-info mb-3" style="max-width: 700px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="https://ssl.pstatic.net/imgmovie/mdi/mit110/0749/74977_P01_190419.jpg" class="img-fluid rounded-start" alt="...">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                            </div>
-                        </div>
-                    </div>
+                <hr class="border-warning">
+
+                <div class="movie_list" id="search_movie_lists">
+                    <!--                검색한 영화 리스트-->
                 </div>
             </div>
 
-
-            <div class="movie-info card border-light mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="https://movie-phinf.pstatic.net/20210831_152/1630371935224qy9s6_JPEG/movie_image.jpg"
-                             class="img-fluid rounded-start" alt="보이스">
-                    </div>
-                    <div class="col-md-8" style="padding-left: 2rem;">
-                        <div class="card-body movie-info-wrapper">
-                            <h2 class="card-title" style="margin-bottom: auto;">보이스 (voice)</h2>
-                            <br/>
-                            <ul class="list">
-                                <li class="card-text">- 2021.09.10</li>
-                                <li class="card-text">- 홍길동</li>
-                                <li class="card-text">- 철수, 영희</li>
-                                <li class="card-text">- 네이버 평점: 8.5</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div id="detail_page">
+                <hr style="margin: 2rem 0; height: 5px;"/>
             </div>
-            <hr style="margin: 2rem 0; height: 5px;"/>
-            <div class="comment-container">
-                <h2>리뷰</h2>
-                <br/>
-                <ul class="list">
-                    <li>영화 재밌네요</li>
-                    <li>영화 재미 없네요</li>
-                    <li>영화 재밌네요</li>
-                    <li>영화 재미 없네요</li>
-                </ul>
-                <br/>
-                <div style="float: right;">
-                    <i class="far fa-thumbs-up"></i> <span>100</span>
-                    <i class="far fa-thumbs-down"></i> <span>13</span>
-                </div>
-                <br/>
-                <br/>
-                <div class="mb-3 review-form">
-                    <textarea class="form-control" rows="3" style="margin-right: 1rem;"></textarea>
-                    <button type="button" class="btn btn-primary">등록</button>
-                </div>
-            </div>
-
-
-        </div>
-
-
-        <div class="star-list" id="star-box">
 
         </div>
     </body>
