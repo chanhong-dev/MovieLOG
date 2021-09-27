@@ -17,7 +17,7 @@ function makeMovieList(movie_info) {
     movie_info['title'] = movie_info['title'].replace("<b>","").replace("</b>","")
 
     let movie_list_html = `<div class="card border-info mb-3" style="max-width: 700px;">
-                                        <div class="row g-0" id="movie_info">
+                                        <div class="row g-0" id="movie_info" onclick="detail_movie('${movie_info['title']}','${movie_info['image']}','${movie_info['pubDate']}','${movie_info['director']}','${movie_info['actor']}','${movie_info['userRating']}','${movie_info['link']}','${movie_info['subtitle']}')">
                                             <div class="col-md-4">
                                                 <img src="${movie_info['image']}" class="img-fluid rounded-start" alt="..." >
                                             </div>
@@ -31,4 +31,31 @@ function makeMovieList(movie_info) {
                                         </div>
                                     </div>`
     $("#search_movie_lists").append(movie_list_html);
+}
+
+function detail_movie(title, image, pubDate, director, actor, userRating,link,subtitle) {
+    console.log(title, image, pubDate, director, actor, userRating)
+    $("#main_page").hide();
+    let detail_movie_info = `<div class="movie-info card border-light mb-3">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <img src="${image}" class="img-fluid rounded-start" alt="image">
+                                            </div>
+                                            <div class="col-md-8" style="padding-left: 2rem;">
+                                                <div class="card-body movie-info-wrapper">
+                                                    <h2 class="card-title" style="margin-bottom: auto;">${title}</h2>
+                                                    <h3 class="card-title" style="margin-bottom: auto;">${subtitle}</h3>
+                                                    <br/>
+                                                    <ul class="list">
+                                                        <li class="card-text">${pubDate}</li>
+                                                        <li class="card-text">${director}</li>
+                                                        <li class="card-text">${actor}</li>
+                                                        <li class="card-text">${userRating}</li>
+                                                        <li class="card-text">${link}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`
+    $("#detail_page").append(detail_movie_info);
 }
