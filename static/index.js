@@ -17,7 +17,7 @@ function makeMovieList(movie_info) {
     movie_info['title'] = movie_info['title'].replace("<b>","").replace("</b>","")
 
     let movie_list_html = `<div class="card border-info mb-3" style="max-width: 700px;">
-                                        <div class="row g-0" id="movie_info" onclick="detail_movie('${movie_info['title']}','${movie_info['image']}','${movie_info['pubDate']}','${movie_info['director']}','${movie_info['actor']}','${movie_info['userRating']}','${movie_info['link']}','${movie_info['subtitle']}')">
+                                        <div class="row g-0" id="movie_info" onclick="detailMovie('${movie_info['title']}','${movie_info['image']}','${movie_info['pubDate']}','${movie_info['director']}','${movie_info['actor']}','${movie_info['userRating']}','${movie_info['link']}','${movie_info['subtitle']}')">
                                             <div class="col-md-4">
                                                 <img src="${movie_info['image']}" class="img-fluid rounded-start" alt="..." >
                                             </div>
@@ -33,7 +33,7 @@ function makeMovieList(movie_info) {
     $("#search_movie_lists").append(movie_list_html);
 }
 
-function detail_movie(title, image, pubDate, director, actor, userRating,link,subtitle) {
+function detailMovie(title, image, pubDate, director, actor, userRating,link,subtitle) {
     console.log(title, image, pubDate, director, actor, userRating)
     $("#main_page").hide();
     let detail_movie_info = `<div class="movie-info card border-light mb-3">
@@ -43,7 +43,7 @@ function detail_movie(title, image, pubDate, director, actor, userRating,link,su
                                             </div>
                                             <div class="col-md-8" style="padding-left: 2rem;">
                                                 <div class="card-body movie-info-wrapper">
-                                                    <h2 class="card-title" style="margin-bottom: auto;">${title}</h2>
+                                                    <h2 id="detail_title" class="card-title" style="margin-bottom: auto;">${title}</h2>
                                                     <h3 class="card-title" style="margin-bottom: auto;">${subtitle}</h3>
                                                     <br/>
                                                     <ul class="list">
@@ -58,4 +58,42 @@ function detail_movie(title, image, pubDate, director, actor, userRating,link,su
                                         </div>
                                     </div>`
     $("#detail_page").append(detail_movie_info);
+    getReviews()
+}
+
+function getReviews() {
+    let title = $('#detail_title').text()
+    $("#reviews").show()
+    $.ajax({
+        type: "GET",
+        url: `/api/reviews?title=${title}`,
+        data: {},
+        success: function (response) {
+            $("#review_list").empty()
+            response.forEach(function (review) {
+                makeReviewList(review);
+            });
+        }
+    })
+}
+
+function saveReview() {
+    let title = $('#detail_title').text()
+    let review = $('#review_text').val()
+
+    $.ajax({
+        type: "POST",
+        url: `/api/review`,
+        data: {title : title , review : review},
+        success: function (response) {
+            alert(response["success"]);
+            getReviews()
+        }
+    })
+}
+
+function makeReviewList(review){
+    let review_list_html = `<li>${review['review']}</li>`
+
+    $("#review_list").append(review_list_html);
 }
