@@ -1,10 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-</body>
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+        <!-- 구글폰트 -->
+        <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+
+        <title>Movie LOG</title>
+
+        <script>
+
+        </script>
+        <style>
+
+        </style>
+    </head>
+    <body>
+        <section class="hero is-warning">
+            <div class="hero-body">
+                <div class="container center">
+                    <h1 class="title">
+                        Movie LOG😆
+                    </h1>
+                </div>
+            </div>
+        </section>
+
+        <div class="wrapper">
+
+            <div id="main_page">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="영화 이름" aria-label="Recipient's username"
+                           aria-describedby="basic-addon2" id="movie_name">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" onclick="getMovies()">검색</button>
+                    </div>
+                </div>
+                <div>
+                    <select class="form-select float-right" aria-label="Default select example">
+                        <option selected>정렬</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                    </select>
+                    <br/>
+                </div>
+
+                <hr class="border-warning">
+
+                <div class="movie_list" id="search_movie_lists">
+                    <!--                검색한 영화 리스트-->
+                </div>
+            </div>
+
+            <div id="detail_page">
+                <hr style="margin: 2rem 0; height: 5px;"/>
+            </div>
+        </div>
+    </body>
 </html>
