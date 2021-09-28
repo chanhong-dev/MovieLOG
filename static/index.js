@@ -14,7 +14,7 @@ function getMovies() {
 }
 
 function makeMovieList(movie_info) {
-    movie_info['title'] = movie_info['title'].replace("<b>","").replace("</b>","")
+    movie_info['title'] = movie_info['title'].replace("<b>", "").replace("</b>", "")
 
     let movie_list_html = `<div class="card border-info mb-3" style="max-width: 700px;">
                                         <div class="row g-0" id="movie_info" onclick="detailMovie('${movie_info['title']}','${movie_info['image']}','${movie_info['pubDate']}','${movie_info['director']}','${movie_info['actor']}','${movie_info['userRating']}','${movie_info['link']}','${movie_info['subtitle']}')">
@@ -39,19 +39,19 @@ function detailMovie(title, image, pubDate, director, actor, userRating,link,sub
     let detail_movie_info = `<div class="movie-info card border-light mb-3">
                                         <div class="row g-0">
                                             <div class="col-md-4">
-                                                <img src="${image}" class="img-fluid rounded-start" alt="image">
+                                                <img src="${image}" class="img-fluid rounded-start" alt="image" style="width:480px; height: 350px">
                                             </div>
                                             <div class="col-md-8" style="padding-left: 2rem;">
                                                 <div class="card-body movie-info-wrapper">
                                                     <h2 id="detail_title" class="card-title" style="margin-bottom: auto;">${title}</h2>
-                                                    <h3 class="card-title" style="margin-bottom: auto;">${subtitle}</h3>
+                                                    <h4 class="card-title" style="margin-bottom: auto;">${subtitle}</h4>
                                                     <br/>
-                                                    <ul class="list">
+                                                    <ul class="list" >
                                                         <li class="card-text">${pubDate}</li>
                                                         <li class="card-text">${director}</li>
                                                         <li class="card-text">${actor}</li>
                                                         <li class="card-text">${userRating}</li>
-                                                        <li class="card-text">${link}</li>
+                                                        <a href="${link}" title="네이버 영화 링크">네이버 영화 링크<a>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -93,7 +93,7 @@ function saveReview() {
 }
 
 function makeReviewList(review){
-    let review_list_html = `<li>${review['review']}</li>`
+    let review_list_html = `<li style="padding-bottom: 10px">${review['review']}</li>`
 
     $("#review_list").append(review_list_html);
 }
