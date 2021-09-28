@@ -74,6 +74,27 @@
                 <hr style="margin: 2rem 0; height: 5px;"/>
             </div>
 
+            <hr class="border-warning">
+
+            <div id="reviews" style="display: none">
+                <div class="comment-container">
+                     <h2>리뷰</h2>
+                     <br/>
+                     <ul class="list" id="review_list">
+                        <!--                         리뷰 리스트-->
+                     </ul>
+                     <br/>
+                     <div style="float: right;">
+                         <i class="far fa-thumbs-up"></i> <span>100</span>
+                         <i class="far fa-thumbs-down"></i> <span>13</span>
+                     </div>
+                     <br/>
+                     <div class="mb-3 review-form">
+                         <textarea id="review_text" class="form-control" rows="3" style="margin-right: 1rem;"></textarea>
+                         <button type="button" class="btn btn-primary" onclick="saveReview()">등록</button>
+                     </div>
+                 </div>
+            </div>
         </div>
     </body>
 </html>
