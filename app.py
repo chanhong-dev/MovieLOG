@@ -101,7 +101,20 @@ def update_like():
 
     db.likedislike.update_one({'title': title_receive }, {'$set': {'like': current_like}})
 
-    return jsonify({'success':'좋아요!'})
+    return jsonify({'success' : '좋아요!'})
+
+
+@app.route('/api/rank-review', methods=['GET'])
+def get_rank_review():
+    rank_review = list(db.moviereview.aggregate(
+        [
+            {
+                "$sortByCount" : "$title"
+            }
+        ]
+    ))
+    return jsonify(rank_review)
+
 
 
 if __name__ == '__main__':
