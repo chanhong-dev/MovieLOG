@@ -2,16 +2,7 @@
     text-align: center;
 }
 
-.star-list {
-    width: 500px;
-    margin: 20px auto 0 auto;
-}
-
 .wrapper {
-    /*position: absolute;*/
-    /*top: 50%;*/
-    /*left: 50%;*/
-    /*transform: translate(-50%, -50%)*/
     width: 700px;
     margin: 20px auto 0 auto;
 }
@@ -23,16 +14,17 @@
 
 .movie-info {
     margin: 0 auto;
-    width: 50rem;
+    width: 700px;
 }
 
 h1 {
     text-align: center;
     margin: 2rem 0 4rem;
+    color: white;
 }
 
 .comment-container {
-    width: 40%;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -57,4 +49,12 @@ ul.list > li {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.ttee{
+    background-image: url("http://i.stack.imgur.com/vhoa0.jpg");
+    background-position: center;
+    background-size: cover;
+    height: 200px;
+    width: 100%;
 }
