@@ -44,7 +44,9 @@ def get_movies():
 def get_reviews():
     search_title = request.args.get('title')
     reviews = list(db.moviereview.find({'title':search_title}, {'_id':False}))
+
     return jsonify(reviews)
+
 
 
 @app.route('/api/review', methods=['POST'])
@@ -60,6 +62,46 @@ def save_reviews():
     db.moviereview.insert_one(doc)
 
     return jsonify({'success':'리뷰 저장 완료!'})
+
+
+@app.route('/api/confirm-like', methods=['GET'])
+def get_like_dislike():
+    search_title = request.args.get('title')
+
+    preference = db.likedislike.find_one({'title': search_title},{'_id':False})
+
+    if(preference == None):
+        return jsonify({'result' : 0 })
+    else:
+        return jsonify(preference)
+
+
+@app.route('/api/new-like', methods=['POST'])
+def save_like():
+    title_receive = request.form['title']
+
+    doc = {
+        'title' : title_receive,
+        'like' : 1,
+        'dislike' : 0
+    }
+
+    db.likedislike.insert_one(doc)
+
+    return jsonify({'success':'좋아요!'})
+
+
+@app.route('/api/update-like', methods=['POST'])
+def update_like():
+    title_receive = request.form['title']
+    like_receive = request.form['like']
+    dislike_receive = request.form['dislike']
+
+    current_like = int(like_receive) +1
+
+    db.likedislike.update_one({'title': title_receive }, {'$set': {'like': current_like}})
+
+    return jsonify({'success':'좋아요!'})
 
 
 if __name__ == '__main__':

@@ -36,6 +36,7 @@ function makeMovieList(movie_info) {
 function detailMovie(title, image, pubDate, director, actor, userRating,link,subtitle) {
     console.log(title, image, pubDate, director, actor, userRating)
     $("#main_page").hide();
+    $("#like-dislike").show();
     let detail_movie_info = `<div class="movie-info card border-light mb-3">
                                         <div class="row g-0">
                                             <div class="col-md-4">
@@ -90,10 +91,51 @@ function saveReview() {
             getReviews()
         }
     })
+    document.getElementById('review_text').value = '';
 }
 
 function makeReviewList(review){
     let review_list_html = `<li style="padding-bottom: 10px">${review['review']}</li>`
 
     $("#review_list").append(review_list_html);
+}
+
+function confirmDataLike(){
+    let title = $('#detail_title').text()
+    $.ajax({
+        type: "GET",
+        url: `/api/confirm-like?title=${title}`,
+        data: {},
+        success: function (response) {
+            if(response['result']===0){
+                insertLike();
+            }
+            else{
+                updateLike(response['title'],response['like'],response['dislike']);
+            }
+        }
+    })
+}
+
+function insertLike(){
+    let title = $('#detail_title').text()
+    $.ajax({
+        type: "POST",
+        url: `/api/new-like`,
+        data: {title : title},
+        success: function (response) {
+            alert(response['success']);
+        }
+    })
+}
+
+function updateLike(title, like, dislike ){
+    $.ajax({
+        type: "POST",
+        url: `/api/update-like`,
+        data: {title : title , like : like, dislike : dislike},
+        success: function (response) {
+            alert(response['success']);
+        }
+    })
 }
