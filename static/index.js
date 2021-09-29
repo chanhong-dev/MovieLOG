@@ -139,3 +139,36 @@ function updateLike(title, like, dislike ){
         }
     })
 }
+
+function rankLike(){
+    alert("좋아요 순위")
+}
+
+function rankDislike(){
+    alert("싫어요 순위")
+}
+
+function rankReview(){
+    $("#main_page").hide();
+    $("#rank-review").empty()
+    $("#rank-review").show()
+    $("#rank_review").show()
+    $.ajax({
+        type: "GET",
+        url: `/api/rank-review`,
+        data: {},
+        success: function (response) {
+             response.forEach(function (rank_review) {
+                makeRankReviewList(rank_review);
+            });
+        }
+    })
+}
+
+function makeRankReviewList(rank_review){
+    let rank_review_html = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                                ${rank_review['_id']}
+                                <span class="badge badge-primary badge-pill">${rank_review['count']}개</span>
+                            </li>`
+    $("#rank-review").append(rank_review_html);
+}
