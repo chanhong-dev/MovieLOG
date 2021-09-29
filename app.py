@@ -113,8 +113,15 @@ def get_rank_review():
             }
         ]
     ))
+    print(rank_review)
     return jsonify(rank_review)
 
+
+@app.route('/api/rank-like', methods=['GET'])
+def get_rank_like():
+    rank_like = list(db.likedislike.find({},{'_id':False}).sort("like",-1))
+
+    return jsonify(rank_like)
 
 
 if __name__ == '__main__':
