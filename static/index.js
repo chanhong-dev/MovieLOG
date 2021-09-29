@@ -141,7 +141,21 @@ function updateLike(title, like, dislike ){
 }
 
 function rankLike(){
-    alert("좋아요 순위")
+    $('#rank-list').empty()
+    $('#main_page').hide()
+    $('#rank-list').show()
+    $('#rank_like').show()
+    $("#rank_review").hide()
+    $.ajax({
+        type: "GET",
+        url: `/api/rank-like`,
+        data: {},
+        success: function (response) {
+            response.forEach(function (rank_like) {
+                makeRankLikeList(rank_like);
+            });
+        }
+    })
 }
 
 function rankDislike(){
@@ -150,9 +164,10 @@ function rankDislike(){
 
 function rankReview(){
     $("#main_page").hide();
-    $("#rank-review").empty()
-    $("#rank-review").show()
+    $("#rank-list").empty()
+    $("#rank-list").show()
     $("#rank_review").show()
+    $('#rank_like').hide()
     $.ajax({
         type: "GET",
         url: `/api/rank-review`,
@@ -168,7 +183,15 @@ function rankReview(){
 function makeRankReviewList(rank_review){
     let rank_review_html = `<li class="list-group-item d-flex justify-content-between align-items-center">
                                 ${rank_review['_id']}
-                                <span class="badge badge-primary badge-pill">${rank_review['count']}개</span>
+                                <span class="badge badge-primary badge-pill">리뷰 ${rank_review['count']}개</span>
                             </li>`
-    $("#rank-review").append(rank_review_html);
+    $("#rank-list").append(rank_review_html);
+}
+
+function makeRankLikeList(rank_like){
+    let rank_like_html = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                                ${rank_like['title']}
+                                <span class="badge badge-primary badge-pill">좋아요 ${rank_like['like']}개</span>
+                            </li>`
+    $("#rank-list").append(rank_like_html);
 }
