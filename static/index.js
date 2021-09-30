@@ -22,10 +22,10 @@ function makeMovieList(movie_info) {
                                                 <img src="${movie_info['image']}" class="img-fluid rounded-start" alt="..." >
                                             </div>
                                             <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">${movie_info['title']}</h5>
+                                                <div class="card-body" id="movie-info">
+                                                    <h5 class="card-title" style="font-weight: bolder">${movie_info['title']}</h5>
                                                     <p class="card-text">${movie_info['subtitle']}</p>
-                                                    <p class="card-text"><small class="text-muted">좋아요 / 싫어요 </small></p>
+                                                    <span style="padding-right: 10px; font-weight: bold; color: blue">${movie_info['userRating']}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -48,11 +48,11 @@ function detailMovie(title, image, pubDate, director, actor, userRating,link,sub
                                                     <h4 class="card-title" style="margin-bottom: auto;">${subtitle}</h4>
                                                     <br/>
                                                     <ul class="list" >
-                                                        <li class="card-text">${pubDate}</li>
-                                                        <li class="card-text">${director}</li>
-                                                        <li class="card-text">${actor}</li>
-                                                        <li class="card-text">${userRating}</li>
-                                                        <a href="${link}" title="네이버 영화 링크">네이버 영화 링크<a>
+                                                        <li class="card-text">개봉 >${pubDate}</li>
+                                                        <li class="card-text">감독 >${director}</li>
+                                                        <li class="card-text">배우 >${actor}</li>
+                                                        <li class="card-text">평점 >${userRating}</li>
+                                                        <a href="${link}" title="자세히 보기">자세히 보기<a>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -60,6 +60,19 @@ function detailMovie(title, image, pubDate, director, actor, userRating,link,sub
                                     </div>`
     $("#detail_page").append(detail_movie_info);
     getReviews()
+    getCount(title)
+}
+
+function getCount(title){
+    $.ajax({
+        type: "GET",
+        url: `/api/count-like-dislike?title=${title}`,
+        data: {},
+        success: function (response) {
+            $("#count-like").text(response['like'])
+            $("#count-dislike").text(response['dislike'])
+        }
+    })
 }
 
 function getReviews() {
@@ -113,6 +126,7 @@ function confirmDataLike(){
             else{
                 updateLike(response['title'],response['like'],response['dislike']);
             }
+            getCount(title)
         }
     })
 }
@@ -153,6 +167,7 @@ function confirmDataDislike(){
             else{
                 updatedisLike(response['title'],response['like'],response['dislike']);
             }
+            getCount(title)
         }
     })
 }
@@ -183,10 +198,13 @@ function updatedisLike(title, like, dislike ){
 function rankLike(){
     $('#rank-list').empty()
     $('#main_page').hide()
-    $('#rank_list').show()
+    $('#rank-list').show()
     $('#rank_like').show()
     $("#rank_review").hide()
     $('#rank_dislike').hide()
+    $('#detail_page').hide()
+    $('#reviews').hide()
+    $('#like-dislike').hide()
     $.ajax({
         type: "GET",
         url: `/api/rank-like`,
@@ -206,6 +224,9 @@ function rankDislike() {
     $("#rank_review").hide()
     $('#rank_like').hide()
     $("#rank_dislike").show()
+    $('#detail_page').hide()
+    $('#reviews').hide()
+    $('#like-dislike').hide()
     $.ajax({
         type: "GET",
         url: `/api/rank-Dislike`,
@@ -226,6 +247,9 @@ function rankReview(){
     $("#rank_review").show()
     $('#rank_like').hide()
     $('#rank_dislike').hide()
+    $('#detail_page').hide()
+    $('#reviews').hide()
+    $('#like-dislike').hide()
     $.ajax({
         type: "GET",
         url: `/api/rank-review`,

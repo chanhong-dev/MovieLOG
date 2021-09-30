@@ -58,3 +58,29 @@ ul.list > li {
     height: 200px;
     width: 100%;
 }
+
+.list-box{
+    width: 700px;
+    float: left;
+    margin-right: 25px;
+}
+
+.blue{ color: #61A8DC; }
+
+.review-ul {
+    color: #666;
+    list-style:square;
+    padding: 0;
+    margin-left: 20px;
+    font-size: 15px;
+}
+
+.list-title {
+    display: block;
+
+    padding: 14px 0 15px 0;
+    font-size: 30px;
+    font-weight: 100;
+    margin-bottom: 10px;
+    border-bottom: 2px solid;
+}

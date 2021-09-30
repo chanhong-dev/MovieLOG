@@ -8,6 +8,7 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.movielog
 
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -103,6 +104,7 @@ def update_like():
 
     return jsonify({'success' : '좋아요!'})
 
+
 @app.route('/api/confirm-dislike', methods=['GET'])
 def get_dislike():
     search_title = request.args.get('title')
@@ -113,6 +115,7 @@ def get_dislike():
         return jsonify({'result' : 0 })
     else:
         return jsonify(preference)
+
 
 @app.route('/api/new-dislike', methods=['POST'])
 def save_dislike():
@@ -163,9 +166,20 @@ def get_rank_like():
 
 
 @app.route('/api/rank-Dislike', methods=['GET'])
-def get_rank_Dislike():
-    rank_Dislike = list(db.likedislike.find({}, {'_id': False}).sort("dislike", 1))
-    return jsonify(rank_Dislike)
+def get_rank_dislike():
+    rank_dislike = list(db.likedislike.find({}, {'_id': False}).sort("dislike", -1))
+    return jsonify(rank_dislike)
+
+
+@app.route('/api/count-like-dislike', methods=['GET'])
+def get_count():
+    search_title = request.args.get('title')
+    like_dislike_count = db.likedislike.find_one({'title' : search_title},{'_id': False})
+    if(like_dislike_count == None):
+        like_dislike_count = {'title' : search_title, 'like': 0, 'dislike': 0}
+
+    return jsonify(like_dislike_count)
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
