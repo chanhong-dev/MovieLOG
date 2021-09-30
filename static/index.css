@@ -1,0 +1,86 @@
+.center {
+    text-align: center;
+}
+
+.wrapper {
+    width: 700px;
+    margin: 20px auto 0 auto;
+}
+
+#info-container {
+    width: 100%;
+    height: 100vh;
+}
+
+.movie-info {
+    margin: 0 auto;
+    width: 700px;
+}
+
+h1 {
+    text-align: center;
+    margin: 2rem 0 4rem;
+    color: white;
+}
+
+.comment-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul.list > li {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    width: 90%;
+}
+
+.review-form {
+    display: flex;
+}
+
+.movie-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.ttee{
+    background-image: url("http://i.stack.imgur.com/vhoa0.jpg");
+    background-position: center;
+    background-size: cover;
+    height: 200px;
+    width: 100%;
+}
+
+.list-box{
+    width: 700px;
+    float: left;
+    margin-right: 25px;
+}
+
+.blue{ color: #61A8DC; }
+
+.review-ul {
+    color: #666;
+    list-style:square;
+    padding: 0;
+    margin-left: 20px;
+    font-size: 15px;
+}
+
+.list-title {
+    display: block;
+
+    padding: 14px 0 15px 0;
+    font-size: 30px;
+    font-weight: 100;
+    margin-bottom: 10px;
+    border-bottom: 2px solid;
+}
