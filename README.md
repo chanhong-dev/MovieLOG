@@ -3,7 +3,7 @@
 ![Movie Log (1)](https://user-images.githubusercontent.com/90859964/135441460-ee673761-2c87-42a3-9466-7f4947890b71.gif)
 
 🔗 라이브 [상세보기-wiki](https://github.com/chanhong-dev/Team_11/wiki#-%EB%9D%BC%EC%9D%B4%EB%B8%8C)
-
+- http://chanhong.shop/
 
 🏠 소개 
 - Movie LOG 서비스는 영화 리뷰를 공유하고 정보를 제공하는 서비스 입니다.
