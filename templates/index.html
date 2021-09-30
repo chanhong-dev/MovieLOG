@@ -100,18 +100,18 @@
                 <hr style="margin: 2rem 0; height: 5px;"/>
             </div>
 
-            <div id="like-dislike" style="display: none">
+            <div class="col text-center" id="like-dislike" style="display: none; padding-bottom: 15px">
                 <button type="button" class="btn btn-outline-primary" onclick="confirmDataLike()">좋아요</button>
-                <button type="button" class="btn btn-outline-danger" onclick="confirmDataDislike()">싫어요</button>
+                <span id="count-like" style="padding-right: 10px; font-weight: bolder; color: blue"></span>
+                <button type="button" class="btn btn-outline-danger" onclick="confirmDataDislike()">싫어요 </button>
+                <span id="count-dislike" style="color: red; font-weight: bolder"></span>
             </div>
-            <hr class="border-warning">
-
 
             <div id="reviews" style="display: none">
-                <div class="comment-container">
-                     <h2>리뷰</h2>
+                <div class="comment-container list-box blue">
+                     <h2 class="list-title">한 줄 리뷰</h2>
                      <br/>
-                     <ul class="review-list" id="review_list">
+                     <ul class="review-list review-ul" id="review_list">
                         <!--                         리뷰 리스트-->
                      </ul>
                      <br/>
