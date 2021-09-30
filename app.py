@@ -65,7 +65,7 @@ def save_reviews():
 
 
 @app.route('/api/confirm-like', methods=['GET'])
-def get_like_dislike():
+def get_like():
     search_title = request.args.get('title')
 
     preference = db.likedislike.find_one({'title': search_title},{'_id':False})
@@ -102,6 +102,44 @@ def update_like():
     db.likedislike.update_one({'title': title_receive }, {'$set': {'like': current_like}})
 
     return jsonify({'success' : '좋아요!'})
+
+@app.route('/api/confirm-dislike', methods=['GET'])
+def get_dislike():
+    search_title = request.args.get('title')
+
+    preference = db.likedislike.find_one({'title': search_title},{'_id':False})
+
+    if(preference == None):
+        return jsonify({'result' : 0 })
+    else:
+        return jsonify(preference)
+
+@app.route('/api/new-dislike', methods=['POST'])
+def save_dislike():
+    title_receive = request.form['title']
+
+    doc = {
+        'title' : title_receive,
+        'like' : 0,
+        'dislike' : 1
+    }
+
+    db.likedislike.insert_one(doc)
+
+    return jsonify({'success':'싫어요!'})
+
+
+@app.route('/api/update-dislike', methods=['POST'])
+def update_dislike():
+    title_receive = request.form['title']
+    like_receive = request.form['like']
+    dislike_receive = request.form['dislike']
+
+    current_dislike = int(dislike_receive) +1
+
+    db.likedislike.update_one({'title': title_receive }, {'$set': {'dislike': current_dislike}})
+
+    return jsonify({'success' : '싫어요!'})
 
 
 @app.route('/api/rank-review', methods=['GET'])

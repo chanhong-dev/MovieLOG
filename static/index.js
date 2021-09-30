@@ -140,6 +140,46 @@ function updateLike(title, like, dislike ){
     })
 }
 
+function confirmDataDislike(){
+    let title = $('#detail_title').text()
+    $.ajax({
+        type: "GET",
+        url: `/api/confirm-dislike?title=${title}`,
+        data: {},
+        success: function (response) {
+            if(response['result']===0){
+                insertdisLike();
+            }
+            else{
+                updatedisLike(response['title'],response['like'],response['dislike']);
+            }
+        }
+    })
+}
+
+function insertdisLike(){
+    let title = $('#detail_title').text()
+    $.ajax({
+        type: "POST",
+        url: `/api/new-like`,
+        data: {title : title},
+        success: function (response) {
+            alert(response['success']);
+        }
+    })
+}
+
+function updatedisLike(title, like, dislike ){
+    $.ajax({
+        type: "POST",
+        url: `/api/update-dislike`,
+        data: {title : title , like : like, dislike : dislike},
+        success: function (response) {
+            alert(response['success']);
+        }
+    })
+}
+
 function rankLike(){
     $('#rank-list').empty()
     $('#main_page').hide()
