@@ -143,9 +143,10 @@ function updateLike(title, like, dislike ){
 function rankLike(){
     $('#rank-list').empty()
     $('#main_page').hide()
-    $('#rank-list').show()
+    $('#rank_list').show()
     $('#rank_like').show()
     $("#rank_review").hide()
+    $('#rank_dislike').hide()
     $.ajax({
         type: "GET",
         url: `/api/rank-like`,
@@ -158,9 +159,25 @@ function rankLike(){
     })
 }
 
-function rankDislike(){
-    alert("싫어요 순위")
+function rankDislike() {
+    $("#main_page").hide();
+    $("#rank-list").empty()
+    $("#rank-list").show()
+    $("#rank_review").hide()
+    $('#rank_like').hide()
+    $("#rank_dislike").show()
+    $.ajax({
+        type: "GET",
+        url: `/api/rank-Dislike`,
+        data: {},
+        success: function (response) {
+            response.forEach(function (rank_Dislike) {
+                makeRankDislikeList(rank_Dislike);
+            });
+        }
+    })
 }
+
 
 function rankReview(){
     $("#main_page").hide();
@@ -168,6 +185,7 @@ function rankReview(){
     $("#rank-list").show()
     $("#rank_review").show()
     $('#rank_like').hide()
+    $('#rank_dislike').hide()
     $.ajax({
         type: "GET",
         url: `/api/rank-review`,
@@ -195,3 +213,12 @@ function makeRankLikeList(rank_like){
                             </li>`
     $("#rank-list").append(rank_like_html);
 }
+
+function makeRankDislikeList(rank_dislike) {
+    let rank_dislike_html = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                                ${rank_dislike['title']}
+                                <span class="badge badge-primary badge-pill">싫어요 ${rank_dislike['dislike']}개</span>
+                            </li>`
+    $("#rank-list").append(rank_dislike_html);
+}
+

@@ -124,5 +124,10 @@ def get_rank_like():
     return jsonify(rank_like)
 
 
+@app.route('/api/rank-Dislike', methods=['GET'])
+def get_rank_Dislike():
+    rank_Dislike = list(db.likedislike.find({}, {'_id': False}).sort("dislike", 1))
+    return jsonify(rank_Dislike)
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
