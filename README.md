@@ -1,4 +1,4 @@
-# 상한가 1차 팀 프로젝트 
+<img src="https://img.icons8.com/metro/35/000000/py.png"/> <img src="https://img.icons8.com/metro/35/000000/js.png"/> <img src="https://img.icons8.com/metro/35/000000/html.png"/> <img src="https://img.icons8.com/metro/35/000000/css.png"/> <img src="https://img.icons8.com/color/35/000000/mongodb.png"/> <img src="https://img.icons8.com/ios/35/000000/flask.png"/>
 
 🔗 라이브
 
