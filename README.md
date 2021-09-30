@@ -15,15 +15,15 @@
 -양찬홍 이찬호 김다은 
 
 
- 💻기술 선택 이유! [상세보기 -wiki](https://github.com/chanhong-dev/Team_11/wiki/%F0%9F%9B%A0%EF%B8%8F-%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%B4%EC%9C%A0!#%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%B4%EC%9C%A0)
+ 💻기술 선택 이유! [상세보기 -wiki](https://github.com/chanhong-dev/Team_11/wiki/%F0%9F%92%BB%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%B4%EC%9C%A0!#%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%B4%EC%9C%A0)
 
 
-📌 주요 기능 [상세보기 -wiki](https://github.com/chanhong-dev/Team_11/wiki/%F0%9F%93%8C%EC%A3%BC%EC%9A%94%EA%B8%B0%EB%8A%A5%EC%86%8C%EA%B0%9C#%EC%98%81%ED%99%94-%EB%A6%AC%EB%B7%B0-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0)
+📌 주요 기능 [상세보기 -wiki](https://github.com/chanhong-dev/Team_11/wiki/%F0%9F%93%8C%EC%A3%BC%EC%9A%94%EA%B8%B0%EB%8A%A5%EC%86%8C%EA%B0%9C#%EC%98%81%ED%99%94-%EA%B2%80%EC%83%89-%EB%B0%8F-%EC%A0%95%EB%B3%B4-%EC%A0%9C%EA%B3%B5)
 - 영화 리뷰 커뮤니티 
 - 네이버 영화 검색 API를 활용한 영화 정보 제공 
 - 장르 및 국가 옵션을 통한 영화 검색
 - 리뷰 순, 좋아요 싫어요 갯수 순 정렬 제공
 
-😎 트러블 슈팅 [상세보기 -wiki](https://github.com/chanhong-dev/Team_11/wiki/%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85#%EC%B0%AC%ED%99%8D)
+😎 트러블 슈팅 [상세보기 -wiki](https://github.com/chanhong-dev/Team_11/wiki/%F0%9F%98%8E%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85#%EC%B0%AC%ED%99%8D)
 
- 😎1차 프로젝트 소감[상세보기 -wiki](https://github.com/chanhong-dev/Team_11/wiki/%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85#%EC%B0%AC%ED%99%8D)
+ 😎1차 프로젝트 소감[상세보기 -wiki](https://github.com/chanhong-dev/Team_11/wiki/%F0%9F%98%8E-1%EC%B0%A8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%86%8C%EA%B0%90#%EC%B0%AC%ED%99%8D)
