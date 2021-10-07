@@ -50,7 +50,6 @@ def get_reviews():
     return jsonify(reviews)
 
 
-
 @app.route('/api/review', methods=['POST'])
 def save_reviews():
     title_receive = request.form['title']
