@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
+#client = MongoClient('mongodb://test:test@localhost', 27017)
 db = client.movielog
 
 
@@ -154,7 +155,6 @@ def get_rank_review():
             }
         ]
     ))
-    print(rank_review)
     return jsonify(rank_review)
 
 
@@ -176,7 +176,7 @@ def get_count():
     search_title = request.args.get('title')
     like_dislike_count = db.likedislike.find_one({'title' : search_title},{'_id': False})
     if(like_dislike_count == None):
-        like_dislike_count = {'title' : search_title, 'like': 0, 'dislike': 0}
+        like_dislike_count = {'title': search_title, 'like': 0, 'dislike': 0}
 
     return jsonify(like_dislike_count)
 
