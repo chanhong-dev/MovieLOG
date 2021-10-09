@@ -1,4 +1,5 @@
 import json
+import os
 from pymongo import MongoClient
 
 from flask import Flask, render_template, jsonify, request
@@ -7,6 +8,9 @@ app = Flask(__name__)
 
 client = MongoClient('localhost', 27017)
 # client = MongoClient('mongodb://test:test@localhost', 27017)
+# client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+# client_id = os.environ.get("naver_client_id")
+# client_pw = os.environ.get("naver_client_pw")
 db = client.movielog
 
 
@@ -18,7 +22,7 @@ def home():
 @app.route('/api/movies', methods=['GET'])
 def get_movies():
     search_title = request.args.get('movie')
-
+    print(os.environ.get("OneDrive"))
     client_id = "5Dvd8sOK7To6qEiPRBT9"
     client_pw = "gNJwKPtZyX"
     enc_title = urllib.parse.quote(search_title)

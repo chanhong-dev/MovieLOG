@@ -176,7 +176,7 @@ function insertDisLike(){
     let title = $('#detail_title').text()
     $.ajax({
         type: "POST",
-        url: `/api/new-like`,
+        url: `/api/new-dislike`,
         data: {title : title},
         success: function (response) {
             alert(response['success']);
