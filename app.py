@@ -1,11 +1,16 @@
 import json
+import os
+from pymongo import MongoClient
 
 from flask import Flask, render_template, jsonify, request
 import urllib.request
 app = Flask(__name__)
 
-from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
+# client = MongoClient('mongodb://test:test@localhost', 27017)
+# client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+# client_id = os.environ.get("naver_client_id")
+# client_pw = os.environ.get("naver_client_pw")
 db = client.movielog
 
 
@@ -17,23 +22,22 @@ def home():
 @app.route('/api/movies', methods=['GET'])
 def get_movies():
     search_title = request.args.get('movie')
-
+    print(os.environ.get("OneDrive"))
     client_id = "5Dvd8sOK7To6qEiPRBT9"
     client_pw = "gNJwKPtZyX"
     enc_title = urllib.parse.quote(search_title)
     url = "https://openapi.naver.com/v1/search/movie.json?query="+enc_title
-    # # API URL에 query와 패러미터를 추가한 url
+
     req = urllib.request.Request(url)
     req.add_header("X-Naver-Client-Id", client_id)
-    req.add_header("X-Naver-Client-Secret", client_pw)  # header로 id와 secret 추가
+    req.add_header("X-Naver-Client-Secret", client_pw)
 
     response = urllib.request.urlopen(req)
-    # 객체를 매개변수로 request.urlopen을 호출해 Web 서버에 요청
     # print("영화 제목 {} 검색 불가".format(title))
 
-    res_code = response.getcode()  # response의 코드
+    res_code = response.getcode()
 
-    if (res_code == 200):  # 200 OK 이면
+    if res_code == 200:  # 200 OK 이면
         response_body = response.read()
         movie_list = response_body.decode('utf-8')
         json_movie_lists = json.loads(movie_list)
@@ -44,10 +48,9 @@ def get_movies():
 @app.route('/api/reviews', methods=['GET'])
 def get_reviews():
     search_title = request.args.get('title')
-    reviews = list(db.moviereview.find({'title':search_title}, {'_id':False}))
+    reviews = list(db.moviereview.find({'title': search_title}, {'_id': False}))
 
     return jsonify(reviews)
-
 
 
 @app.route('/api/review', methods=['POST'])
@@ -56,23 +59,23 @@ def save_reviews():
     review_receive = request.form['review']
 
     doc = {
-        'title' : title_receive,
-        'review' : review_receive
+        'title': title_receive,
+        'review': review_receive
     }
 
     db.moviereview.insert_one(doc)
 
-    return jsonify({'success':'리뷰 저장 완료!'})
+    return jsonify({'success': '리뷰 저장 완료!'})
 
 
 @app.route('/api/confirm-like', methods=['GET'])
 def get_like():
     search_title = request.args.get('title')
 
-    preference = db.likedislike.find_one({'title': search_title},{'_id':False})
+    preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
 
-    if(preference == None):
-        return jsonify({'result' : 0 })
+    if preference is None:
+        return jsonify({'result': 0})
     else:
         return jsonify(preference)
 
@@ -82,37 +85,36 @@ def save_like():
     title_receive = request.form['title']
 
     doc = {
-        'title' : title_receive,
-        'like' : 1,
-        'dislike' : 0
+        'title': title_receive,
+        'like': 1,
+        'dislike': 0
     }
 
     db.likedislike.insert_one(doc)
 
-    return jsonify({'success':'좋아요!'})
+    return jsonify({'success': '좋아요!'})
 
 
 @app.route('/api/update-like', methods=['POST'])
 def update_like():
     title_receive = request.form['title']
     like_receive = request.form['like']
-    dislike_receive = request.form['dislike']
 
-    current_like = int(like_receive) +1
+    current_like = int(like_receive) + 1
 
-    db.likedislike.update_one({'title': title_receive }, {'$set': {'like': current_like}})
+    db.likedislike.update_one({'title': title_receive}, {'$set': {'like': current_like}})
 
-    return jsonify({'success' : '좋아요!'})
+    return jsonify({'success': '좋아요!'})
 
 
 @app.route('/api/confirm-dislike', methods=['GET'])
 def get_dislike():
     search_title = request.args.get('title')
 
-    preference = db.likedislike.find_one({'title': search_title},{'_id':False})
+    preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
 
-    if(preference == None):
-        return jsonify({'result' : 0 })
+    if preference is None:
+        return jsonify({'result': 0})
     else:
         return jsonify(preference)
 
@@ -122,27 +124,26 @@ def save_dislike():
     title_receive = request.form['title']
 
     doc = {
-        'title' : title_receive,
-        'like' : 0,
-        'dislike' : 1
+        'title': title_receive,
+        'like': 0,
+        'dislike': 1
     }
 
     db.likedislike.insert_one(doc)
 
-    return jsonify({'success':'싫어요!'})
+    return jsonify({'success': '싫어요!'})
 
 
 @app.route('/api/update-dislike', methods=['POST'])
 def update_dislike():
     title_receive = request.form['title']
-    like_receive = request.form['like']
     dislike_receive = request.form['dislike']
 
-    current_dislike = int(dislike_receive) +1
+    current_dislike = int(dislike_receive) + 1
 
-    db.likedislike.update_one({'title': title_receive }, {'$set': {'dislike': current_dislike}})
+    db.likedislike.update_one({'title': title_receive}, {'$set': {'dislike': current_dislike}})
 
-    return jsonify({'success' : '싫어요!'})
+    return jsonify({'success': '싫어요!'})
 
 
 @app.route('/api/rank-review', methods=['GET'])
@@ -150,22 +151,21 @@ def get_rank_review():
     rank_review = list(db.moviereview.aggregate(
         [
             {
-                "$sortByCount" : "$title"
+                "$sortByCount": "$title"
             }
         ]
     ))
-    print(rank_review)
     return jsonify(rank_review)
 
 
 @app.route('/api/rank-like', methods=['GET'])
 def get_rank_like():
-    rank_like = list(db.likedislike.find({},{'_id':False}).sort("like",-1))
+    rank_like = list(db.likedislike.find({}, {'_id': False}).sort("like", -1))
 
     return jsonify(rank_like)
 
 
-@app.route('/api/rank-Dislike', methods=['GET'])
+@app.route('/api/rank-dislike', methods=['GET'])
 def get_rank_dislike():
     rank_dislike = list(db.likedislike.find({}, {'_id': False}).sort("dislike", -1))
     return jsonify(rank_dislike)
@@ -174,9 +174,9 @@ def get_rank_dislike():
 @app.route('/api/count-like-dislike', methods=['GET'])
 def get_count():
     search_title = request.args.get('title')
-    like_dislike_count = db.likedislike.find_one({'title' : search_title},{'_id': False})
-    if(like_dislike_count == None):
-        like_dislike_count = {'title' : search_title, 'like': 0, 'dislike': 0}
+    like_dislike_count = db.likedislike.find_one({'title': search_title}, {'_id': False})
+    if like_dislike_count is None:
+        like_dislike_count = {'title': search_title, 'like': 0, 'dislike': 0}
 
     return jsonify(like_dislike_count)
 
