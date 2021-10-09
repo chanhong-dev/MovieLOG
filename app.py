@@ -6,11 +6,15 @@ from flask import Flask, render_template, jsonify, request
 import urllib.request
 app = Flask(__name__)
 
-client = MongoClient('localhost', 27017)
-# client = MongoClient('mongodb://test:test@localhost', 27017)
-# client = MongoClient(os.environ.get("MONGO_DB_PATH"))
-# client_id = os.environ.get("naver_client_id")
-# client_pw = os.environ.get("naver_client_pw")
+# 테스트 로컬
+# client = MongoClient('localhost', 27017)
+# client_id = "5Dvd8sOK7To6qEiPRBT9"
+# client_pw = "gNJwKPtZyX"
+
+# 배포
+client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+client_id = os.environ.get("NAVER_CLIENT_ID")
+client_pw = os.environ.get("NAVER_CLIENT_PW")
 db = client.movielog
 
 
@@ -22,9 +26,7 @@ def home():
 @app.route('/api/movies', methods=['GET'])
 def get_movies():
     search_title = request.args.get('movie')
-    print(os.environ.get("OneDrive"))
-    client_id = "5Dvd8sOK7To6qEiPRBT9"
-    client_pw = "gNJwKPtZyX"
+
     enc_title = urllib.parse.quote(search_title)
     url = "https://openapi.naver.com/v1/search/movie.json?query="+enc_title
 
