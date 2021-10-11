@@ -162,21 +162,21 @@ function confirmDataDislike(){
         data: {},
         success: function (response) {
             if(response['result']===0){
-                insertdisLike();
+                insertDisLike();
             }
             else{
-                updatedisLike(response['title'],response['like'],response['dislike']);
+                updateDisLike(response['title'],response['like'],response['dislike']);
             }
             getCount(title)
         }
     })
 }
 
-function insertdisLike(){
+function insertDisLike(){
     let title = $('#detail_title').text()
     $.ajax({
         type: "POST",
-        url: `/api/new-like`,
+        url: `/api/new-dislike`,
         data: {title : title},
         success: function (response) {
             alert(response['success']);
@@ -184,7 +184,7 @@ function insertdisLike(){
     })
 }
 
-function updatedisLike(title, like, dislike ){
+function updateDisLike(title, like, dislike ){
     $.ajax({
         type: "POST",
         url: `/api/update-dislike`,
@@ -196,9 +196,8 @@ function updatedisLike(title, like, dislike ){
 }
 
 function rankLike(){
-    $('#rank-list').empty()
+    $('#rank-list').empty().show()
     $('#main_page').hide()
-    $('#rank-list').show()
     $('#rank_like').show()
     $("#rank_review").hide()
     $('#rank_dislike').hide()
@@ -219,8 +218,7 @@ function rankLike(){
 
 function rankDislike() {
     $("#main_page").hide();
-    $("#rank-list").empty()
-    $("#rank-list").show()
+    $("#rank-list").empty().show()
     $("#rank_review").hide()
     $('#rank_like').hide()
     $("#rank_dislike").show()
@@ -229,11 +227,11 @@ function rankDislike() {
     $('#like-dislike').hide()
     $.ajax({
         type: "GET",
-        url: `/api/rank-Dislike`,
+        url: `/api/rank-dislike`,
         data: {},
         success: function (response) {
-            response.forEach(function (rank_Dislike) {
-                makeRankDislikeList(rank_Dislike);
+            response.forEach(function (rank_dislike) {
+                makeRankDislikeList(rank_dislike);
             });
         }
     })
@@ -242,8 +240,7 @@ function rankDislike() {
 
 function rankReview(){
     $("#main_page").hide();
-    $("#rank-list").empty()
-    $("#rank-list").show()
+    $("#rank-list").empty().show()
     $("#rank_review").show()
     $('#rank_like').hide()
     $('#rank_dislike').hide()
