@@ -21,11 +21,16 @@
 
         <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
         <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
         <title>Movie LOG</title>
 
         <script>
-
+            // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+            function logout() {
+                $.removeCookie('mytoken', {path: '/'});
+                alert('로그아웃!')
+                window.location.href = "/"
+            }
         </script>
         <style>
         </style>
@@ -66,6 +71,14 @@
                                 <a class="dropdown-item" onclick="rankReview()">리뷰 갯수⭐</a>
                             </div>
                         </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">박스오피스 순위 <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item active" style="position: relative; left: 70%">
+                            <a class="nav-link" onclick="logout()">
+                                <u>로그아웃</u>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -105,9 +118,9 @@
 
 
             <div class="col text-center" id="like-dislike" style="display: none; padding-bottom: 15px">
-                <button type="button" class="btn btn-outline-primary" onclick="confirmDataLike()">좋아요</button>
+                <button type="button" class="btn btn-outline-primary" onclick="get_today_lank('ko')">한국</button>
                 <span id="count-like" style="padding-right: 10px; font-weight: bolder; color: blue"></span>
-                <button type="button" class="btn btn-outline-danger" onclick="confirmDataDislike()">싫어요 </button>
+                <button type="button" class="btn btn-outline-danger" onclick="get_today_lank('fo')">외국 </button>
                 <span id="count-dislike" style="color: red; font-weight: bolder"></span>
             </div>
 

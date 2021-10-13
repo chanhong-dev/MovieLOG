@@ -8,6 +8,7 @@ function getMovies() {
             $("#search_movie_lists").empty()
             response.forEach(function (movie_list) {
                 makeMovieList(movie_list);
+
             });
         }
     })
@@ -249,7 +250,7 @@ function rankReview(){
     $('#like-dislike').hide()
     $.ajax({
         type: "GET",
-        url: `/api/rank-review`,
+        url: `/api/rank-review?country=${test}`,
         data: {},
         success: function (response) {
              response.forEach(function (rank_review) {
@@ -282,4 +283,3 @@ function makeRankDislikeList(rank_dislike) {
                             </li>`
     $("#rank-list").append(rank_dislike_html);
 }
-
