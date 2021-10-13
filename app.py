@@ -21,7 +21,6 @@ SECRET_KEY = 'SPARTA'
 # client_id = os.environ.get("NAVER_CLIENT_ID")
 # client_pw = os.environ.get("NAVER_CLIENT_PW")
 
-
 db = client.movielog
 
 
@@ -267,7 +266,8 @@ def get_user():
     token_receive = request.cookies.get('mytoken')
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
     userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-    print(userinfo)
+
+    return userinfo
 
 
 if __name__ == '__main__':
