@@ -10,23 +10,24 @@ from flask import Flask, render_template, jsonify, request
 import urllib.request
 from urllib import request as r
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 # 테스트 로컬
-client = MongoClient('localhost', 27017)
-client_id = "5Dvd8sOK7To6qEiPRBT9"
-client_pw = "gNJwKPtZyX"
-SECRET_KEY = 'SPARTA'
+# client = MongoClient('localhost', 27017)
+# client_id = "5Dvd8sOK7To6qEiPRBT9"
+# client_pw = "gNJwKPtZyX"
+# SECRET_KEY = 'SPARTA'
 
 # 배포
-# client = MongoClient(os.environ.get("MONGO_DB_PATH"))
-# client_id = os.environ.get("NAVER_CLIENT_ID")
-# client_pw = os.environ.get("NAVER_CLIENT_PW")
+client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+client_id = os.environ.get("NAVER_CLIENT_ID")
+client_pw = os.environ.get("NAVER_CLIENT_PW")
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 db = client.movielog
 
 
-@app.route('/')
+@application.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
 
@@ -41,7 +42,7 @@ def home():
         return render_template('login.html')
 
 
-@app.route('/api/movies', methods=['GET'])
+@application.route('/api/movies', methods=['GET'])
 def get_movies():
     search_title = request.args.get('movie')
     get_user()
@@ -65,14 +66,14 @@ def get_movies():
     return jsonify(json_movie_lists['items'])
 
 
-@app.route('/api/reviews', methods=['GET'])
+@application.route('/api/reviews', methods=['GET'])
 def get_reviews():
     search_title = request.args.get('title')
     reviews = list(db.moviereview.find({'title': search_title}, {'_id': False}))
     return jsonify(reviews)
 
 
-@app.route('/api/review', methods=['POST'])
+@application.route('/api/review', methods=['POST'])
 def save_reviews():
     title_receive = request.form['title']
     review_receive = request.form['review']
@@ -84,7 +85,7 @@ def save_reviews():
     return jsonify({'success': '리뷰 저장 완료!'})
 
 
-@app.route('/api/confirm-like', methods=['GET'])
+@application.route('/api/confirm-like', methods=['GET'])
 def get_like():
     search_title = request.args.get('title')
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
@@ -94,7 +95,7 @@ def get_like():
         return jsonify(preference)
 
 
-@app.route('/api/new-like', methods=['POST'])
+@application.route('/api/new-like', methods=['POST'])
 def save_like():
     title_receive = request.form['title']
     doc = {
@@ -106,7 +107,7 @@ def save_like():
     return jsonify({'success': '좋아요!'})
 
 
-@app.route('/api/update-like', methods=['POST'])
+@application.route('/api/update-like', methods=['POST'])
 def update_like():
     title_receive = request.form['title']
     like_receive = request.form['like']
@@ -115,7 +116,7 @@ def update_like():
     return jsonify({'success': '좋아요!'})
 
 
-@app.route('/api/confirm-dislike', methods=['GET'])
+@application.route('/api/confirm-dislike', methods=['GET'])
 def get_dislike():
     search_title = request.args.get('title')
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
@@ -125,7 +126,7 @@ def get_dislike():
         return jsonify(preference)
 
 
-@app.route('/api/new-dislike', methods=['POST'])
+@application.route('/api/new-dislike', methods=['POST'])
 def save_dislike():
     title_receive = request.form['title']
     doc = {
@@ -137,7 +138,7 @@ def save_dislike():
     return jsonify({'success': '싫어요!'})
 
 
-@app.route('/api/update-dislike', methods=['POST'])
+@application.route('/api/update-dislike', methods=['POST'])
 def update_dislike():
     title_receive = request.form['title']
     dislike_receive = request.form['dislike']
@@ -146,7 +147,7 @@ def update_dislike():
     return jsonify({'success': '싫어요!'})
 
 
-@app.route('/api/rank-review', methods=['GET'])
+@application.route('/api/rank-review', methods=['GET'])
 def get_rank_review():
     rank_review = list(db.moviereview.aggregate(
         [
@@ -158,19 +159,19 @@ def get_rank_review():
     return jsonify(rank_review)
 
 
-@app.route('/api/rank-like', methods=['GET'])
+@application.route('/api/rank-like', methods=['GET'])
 def get_rank_like():
     rank_like = list(db.likedislike.find({}, {'_id': False}).sort("like", -1))
     return jsonify(rank_like)
 
 
-@app.route('/api/rank-dislike', methods=['GET'])
+@application.route('/api/rank-dislike', methods=['GET'])
 def get_rank_dislike():
     rank_dislike = list(db.likedislike.find({}, {'_id': False}).sort("dislike", -1))
     return jsonify(rank_dislike)
 
 
-@app.route('/api/count-like-dislike', methods=['GET'])
+@application.route('/api/count-like-dislike', methods=['GET'])
 def get_count():
     search_title = request.args.get('title')
     like_dislike_count = db.likedislike.find_one({'title': search_title}, {'_id': False})
@@ -179,7 +180,7 @@ def get_count():
     return jsonify(like_dislike_count)
 
 
-@app.route('/api/today-rank', methods=['GET'])
+@application.route('/api/today-rank', methods=['GET'])
 def get_today_rank():
     country_title = request.args.get('country')
     yesterday = (datetime.today() - timedelta(1)).strftime("%Y%m%d")
@@ -200,19 +201,19 @@ def get_today_rank():
         print(rank['dailyBoxOfficeList'])
     return jsonify(rank['dailyBoxOfficeList'])
 
-  
-@app.route('/login')
+
+@application.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
 
-@app.route('/register')
+@application.route('/register')
 def register():
     return render_template('register.html')
 
 
-@app.route('/api/register', methods=['POST'])
+@application.route('/api/register', methods=['POST'])
 def api_register():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
@@ -225,7 +226,7 @@ def api_register():
     return jsonify({'result': 'success'})
 
 
-@app.route('/api/login', methods=['POST'])
+@application.route('/api/login', methods=['POST'])
 def api_login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
@@ -247,7 +248,7 @@ def api_login():
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
-@app.route('/api/nick', methods=['GET'])
+@application.route('/api/nick', methods=['GET'])
 def api_valid():
     token_receive = request.cookies.get('mytoken')
 
@@ -273,4 +274,5 @@ def get_user():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    application.debug = True
+    application.run()
