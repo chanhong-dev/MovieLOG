@@ -5,7 +5,7 @@ import os
 import jwt
 from pymongo import MongoClient
 from datetime import datetime, timedelta
-import datetime
+
 from flask import Flask, render_template, jsonify, request
 import urllib.request
 from urllib import request as r
@@ -239,7 +239,7 @@ def api_login():
 
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+            'exp': datetime.utcnow() + timedelta(hours=24)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
