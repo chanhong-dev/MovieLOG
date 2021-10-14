@@ -1,137 +1,128 @@
 <!doctype html>
 
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-        <!-- JS -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/latest/js/bootstrap.min.js"></script>
-        <!-- 구글폰트 -->
-        <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
-
-        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-        <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
-
-        <title>Movie LOG</title>
-
-        <script>
-
-        </script>
-        <style>
-        </style>
-
-    </head>
-    <body>
-        <div class="ttee">
-            <section class="hero is-warning">
-                <div class="hero-body">
-                    <div class="container center">
-                        <h1 class="title"  style="padding-top: 70px">
-                            <a style="color: white" href="/">🍿Movie LOG🎥</a>
-                        </h1>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <div class="wrapper">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-primary font-weight-bold" style="margin-bottom: 15px">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-                        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                영화 순위
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" onclick="rankLike()">좋아요 순😛</a>
-                                <a class="dropdown-item" onclick="rankDislike()">싫어요 순🥵</a>
-                                <a class="dropdown-item" onclick="rankReview()">리뷰 갯수⭐</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <hr class="border-warning">
-
-            <div style="text-align: center">
-                <h2 id="rank_review" style="display: none">⭐리뷰 랭킹⭐</h2>
-                <h2 id="rank_like" style="display: none">😛좋아요 랭킹😛</h2>
-                <h2 id="rank_dislike"style="display: none">🥵싫어요 랭킹🥵</h2>
-            </div>
-
-            <div id="main_page">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="영화 이름" aria-label="Recipient's username"
-                           aria-describedby="basic-addon2" id="movie_name">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary btn-success" type="button" onclick="getMovies()">검색</button>
-                    </div>
-                </div>
-
-                <hr class="border-warning">
-
-                <div class="movie_list" id="search_movie_lists">
-                    <!--                검색한 영화 리스트-->
-                </div>
-                <div style="text-align: center">
-                    <img src="/static/image/logo.gif" class="img-fluid rounded-start" alt="image"
-                         style="width:540px; height: 540px; ">
-                </div>
-            </div>
-
-            <div id="detail_page" style="width: 700px">
-                <hr style="margin: 2rem 0; height: 5px;"/>
-            </div>
-
-
-
-            <div class="col text-center" id="like-dislike" style="display: none; padding-bottom: 15px">
-                <button type="button" class="btn btn-outline-primary" onclick="confirmDataLike()">좋아요</button>
-                <span id="count-like" style="padding-right: 10px; font-weight: bolder; color: blue"></span>
-                <button type="button" class="btn btn-outline-danger" onclick="confirmDataDislike()">싫어요 </button>
-                <span id="count-dislike" style="color: red; font-weight: bolder"></span>
-            </div>
-
-            <div id="reviews" style="display: none">
-                <div class="comment-container list-box blue">
-                     <h2 class="list-title">한 줄 리뷰</h2>
-                     <br/>
-                     <ul class="review-list review-ul" id="review_list">
-                        <!--                         리뷰 리스트-->
-                     </ul>
-                     <br/>
-                     <br/>
-                     <div class="mb-3 review-form">
-                         <textarea id="review_text" class="form-control" rows="3" style="margin-right: 1rem;"></textarea>
-                         <button type="button" class="btn btn-primary btn-success" onclick="saveReview()">등록</button>
-                     </div>
-                 </div>
-            </div>
-
-            <div>
-                <ul class="list-group" id="rank-list" style="display: none">
-                    <!--                    리뷰 순위-->
-                </ul>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/latest/js/bootstrap.min.js"></script>
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+    <title>Movie LOG</title>
+</head>
+<body>
+<div class="ttee">
+    <section class="hero is-warning">
+        <div class="hero-body">
+            <div class="container center">
+                <h1 class="title" style="padding-top: 70px">
+                    <a style="color: white" href="/">🍿Movie LOG🎥</a>
+                </h1>
             </div>
         </div>
-    </body>
+    </section>
+</div>
+<div class="wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary font-weight-bold" style="margin-bottom: 15px">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only"></span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        영화 순위
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" onclick="rankLike()">좋아요 순😛</a>
+                        <a class="dropdown-item" onclick="rankDislike()">싫어요 순🥵</a>
+                        <a class="dropdown-item" onclick="rankReview()">리뷰 갯수⭐</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        일별 박스 오피스 순위
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="nav-link" onclick=""><span class="sr-only">일별 박스 오피스 순위</span></a>
+                        <a class="dropdown-item kor" onclick="get_today_rank('ko')">한국영화</a>
+                        <a class="dropdown-item for" onclick="get_today_rank('fo')">외국영화</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <hr class="border-warning">
+    <div style="text-align: center">
+        <h2 id="this-is-title"></h2>
+    </div>
+    <hr class="border-warning">
+    <div style="text-align: center">
+    </div>
+    <div id="main_page">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="영화 이름" aria-label="Recipient's username"
+                   aria-describedby="basic-addon2" id="movie_name">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary btn-success" type="button" onclick="getMovies()">검색</button>
+            </div>
+        </div>
+        <hr class="border-warning">
+        <div class="movie_list" id="search_movie_lists">
+            <!--                검색한 영화 리스트-->
+        </div>
+        <div style="text-align: center">
+            <img src="/static/image/logo.gif" class="img-fluid rounded-start" alt="image"
+                 style="width:540px; height: 540px; ">
+        </div>
+    </div>
+    <div id="detail_page" style="width: 700px">
+        <hr style="margin: 2rem 0; height: 5px;"/>
+    </div>
+    <div class="col text-center" id="like-dislike" style="display: none; padding-bottom: 15px">
+        <button type="button" class="btn btn-outline-primary" onclick="confirmDataLike()">좋아요</button>
+        <span id="count-like" style="padding-right: 10px; font-weight: bolder; color: blue"></span>
+        <button type="button" class="btn btn-outline-danger" onclick="confirmDataDislike()">싫어요</button>
+        <span id="count-dislike" style="color: red; font-weight: bolder"></span>
+    </div>
+    <div id="reviews" style="display: none">
+        <div class="comment-container list-box blue">
+            <h2 class="list-title">한 줄 리뷰</h2>
+            <br/>
+            <ul class="review-list review-ul" id="review_list">
+                <!--                         리뷰 리스트-->
+            </ul>
+            <br/>
+            <br/>
+            <div class="mb-3 review-form">
+                <label for="review_text"></label>
+                <textarea id="review_text" class="form-control" rows="3" style="margin-right: 1rem;"></textarea>
+                <button type="button" class="btn btn-primary btn-success" onclick="saveReview()">등록</button>
+            </div>
+        </div>
+    </div>
+    <div>
+        <ul class="list-group" id="rank-list" style="display: none">
+            <!--                    리뷰 순위-->
+        </ul>
+    </div>
+</div>
+</body>
 </html>

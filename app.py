@@ -1,17 +1,13 @@
 import json
 import os
+from datetime import timedelta, datetime
 from pymongo import MongoClient
-
 from flask import Flask, render_template, jsonify, request
-import urllib.request
+from urllib import parse
+from urllib import request as r
+
 app = Flask(__name__)
 
-# 테스트 로컬
-# client = MongoClient('localhost', 27017)
-# client_id = "5Dvd8sOK7To6qEiPRBT9"
-# client_pw = "gNJwKPtZyX"
-
-# 배포
 client = MongoClient(os.environ.get("MONGO_DB_PATH"))
 client_id = os.environ.get("NAVER_CLIENT_ID")
 client_pw = os.environ.get("NAVER_CLIENT_PW")
@@ -26,24 +22,18 @@ def home():
 @app.route('/api/movies', methods=['GET'])
 def get_movies():
     search_title = request.args.get('movie')
-
-    enc_title = urllib.parse.quote(search_title)
+    enc_title = parse.quote(search_title)
     url = "https://openapi.naver.com/v1/search/movie.json?query="+enc_title
-
-    req = urllib.request.Request(url)
+    req = r.Request(url)
     req.add_header("X-Naver-Client-Id", client_id)
     req.add_header("X-Naver-Client-Secret", client_pw)
-
-    response = urllib.request.urlopen(req)
+    response = r.urlopen(req)
     # print("영화 제목 {} 검색 불가".format(title))
-
     res_code = response.getcode()
-
     if res_code == 200:  # 200 OK 이면
         response_body = response.read()
         movie_list = response_body.decode('utf-8')
         json_movie_lists = json.loads(movie_list)
-
     return jsonify(json_movie_lists['items'])
 
 
@@ -51,7 +41,6 @@ def get_movies():
 def get_reviews():
     search_title = request.args.get('title')
     reviews = list(db.moviereview.find({'title': search_title}, {'_id': False}))
-
     return jsonify(reviews)
 
 
@@ -59,23 +48,18 @@ def get_reviews():
 def save_reviews():
     title_receive = request.form['title']
     review_receive = request.form['review']
-
     doc = {
         'title': title_receive,
         'review': review_receive
     }
-
     db.moviereview.insert_one(doc)
-
     return jsonify({'success': '리뷰 저장 완료!'})
 
 
 @app.route('/api/confirm-like', methods=['GET'])
 def get_like():
     search_title = request.args.get('title')
-
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
-
     if preference is None:
         return jsonify({'result': 0})
     else:
@@ -85,15 +69,12 @@ def get_like():
 @app.route('/api/new-like', methods=['POST'])
 def save_like():
     title_receive = request.form['title']
-
     doc = {
         'title': title_receive,
         'like': 1,
         'dislike': 0
     }
-
     db.likedislike.insert_one(doc)
-
     return jsonify({'success': '좋아요!'})
 
 
@@ -101,20 +82,15 @@ def save_like():
 def update_like():
     title_receive = request.form['title']
     like_receive = request.form['like']
-
     current_like = int(like_receive) + 1
-
     db.likedislike.update_one({'title': title_receive}, {'$set': {'like': current_like}})
-
     return jsonify({'success': '좋아요!'})
 
 
 @app.route('/api/confirm-dislike', methods=['GET'])
 def get_dislike():
     search_title = request.args.get('title')
-
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
-
     if preference is None:
         return jsonify({'result': 0})
     else:
@@ -124,15 +100,12 @@ def get_dislike():
 @app.route('/api/new-dislike', methods=['POST'])
 def save_dislike():
     title_receive = request.form['title']
-
     doc = {
         'title': title_receive,
         'like': 0,
         'dislike': 1
     }
-
     db.likedislike.insert_one(doc)
-
     return jsonify({'success': '싫어요!'})
 
 
@@ -140,11 +113,8 @@ def save_dislike():
 def update_dislike():
     title_receive = request.form['title']
     dislike_receive = request.form['dislike']
-
     current_dislike = int(dislike_receive) + 1
-
     db.likedislike.update_one({'title': title_receive}, {'$set': {'dislike': current_dislike}})
-
     return jsonify({'success': '싫어요!'})
 
 
@@ -163,7 +133,6 @@ def get_rank_review():
 @app.route('/api/rank-like', methods=['GET'])
 def get_rank_like():
     rank_like = list(db.likedislike.find({}, {'_id': False}).sort("like", -1))
-
     return jsonify(rank_like)
 
 
@@ -179,8 +148,29 @@ def get_count():
     like_dislike_count = db.likedislike.find_one({'title': search_title}, {'_id': False})
     if like_dislike_count is None:
         like_dislike_count = {'title': search_title, 'like': 0, 'dislike': 0}
-
     return jsonify(like_dislike_count)
+
+
+@app.route('/api/today-rank', methods=['GET'])
+def get_today_rank():
+    country_title = request.args.get('country')
+    yesterday = (datetime.today() - timedelta(1)).strftime("%Y%m%d")
+    print(yesterday)
+    if country_title == 'ko':
+        url2 = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?repNationCd=K&key=039485c038f20e231e30fdd8e084b8e9&targetDt=" + yesterday
+    else:
+        url2 = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?repNationCd=F&key=039485c038f20e231e30fdd8e084b8e9&targetDt=" + yesterday
+    req2 = r.Request(url2)
+    response = r.urlopen(req2)
+    # print("영화 제목 {} 검색 불가".format(title))
+    res_code = response.getcode()
+    if res_code == 200:  # 200 OK 이면
+        response_body = response.read()
+        movie_list = response_body.decode('utf-8')
+        json_movie_lists = json.loads(movie_list)
+        test = json_movie_lists['boxOfficeResult']
+        print(test['dailyBoxOfficeList'])
+    return jsonify(test['dailyBoxOfficeList'])
 
 
 if __name__ == '__main__':
