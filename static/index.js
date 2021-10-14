@@ -268,16 +268,17 @@ function makeRankList(rank, type) {
     $("#rank-list").append(tmpHtml);
 }
 
-function get_today_rank(test) {
-    $("#rank-list").empty();
+function get_today_rank(con) {
+    $("#rank-list").empty().show();
     $("#main_page").hide();
-    let country = test === 'ko' ? '한국' : '외국'
+    let country = con === 'ko' ? '한국' : '외국'
     $("#this-is-title").text(`${country} 영화 박스오피스 순위`)
     $('#detail_page').hide()
     $('#reviews').hide()
+    $('#like-dislike').hide()
     $.ajax({
         type: "GET",
-        url: `/api/today-rank?country=${test}`,
+        url: `/api/today-rank?country=${con}`,
         data: {},
         success: function (response) {
             response.forEach(function (get_ko_rank) {
