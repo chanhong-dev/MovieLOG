@@ -242,24 +242,32 @@ function rankReview() {
     $('#like-dislike').hide()
     $.ajax({
         type: "GET",
-        url: `/api/rank-review?country=${test}`,
+        url: `/api/rank-review`,
         data: {},
         success: (response) => {
-            response.forEach(rank => makeRankList(rank, 'review'))
+            response.forEach(function (rank_review) {
+                makeRankList(rank_review, 'review');
+            });
         }
     })
 }
 
 function makeRankList(rank, type) {
+    let count
     let typeText
-    let count = rank['count']
-    let title = rank['title']
+    let title
     if (type === 'review') {
+        title = rank['_id']
+        count = rank['count']
         typeText = "리뷰"
     } else if (type === 'like') {
+        title = rank['title']
         typeText = "좋아요"
+        count = rank['like']
     } else if (type === 'dislike') {
+        title = rank['title']
         typeText = "싫어요"
+        count = rank['dislike']
     }
     let tmpHtml = `
         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -268,6 +276,7 @@ function makeRankList(rank, type) {
         </li>`
     $("#rank-list").append(tmpHtml);
 }
+
 
 function get_today_rank(con) {
     $("#rank-list").empty().show();

@@ -2,11 +2,9 @@ import hashlib
 import json
 import os
 
-
 import jwt
 from pymongo import MongoClient
 from datetime import datetime, timedelta
-import datetime
 
 from flask import Flask, render_template, jsonify, request
 import urllib.request
@@ -181,7 +179,6 @@ def get_count():
     return jsonify(like_dislike_count)
 
 
-
 @app.route('/api/today-rank', methods=['GET'])
 def get_today_rank():
     country_title = request.args.get('country')
@@ -273,7 +270,6 @@ def get_user():
     userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
 
     return userinfo
-
 
 
 if __name__ == '__main__':
