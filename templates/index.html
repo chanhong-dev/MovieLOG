@@ -14,21 +14,82 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/latest/js/bootstrap.min.js"></script>
-    <!-- 구글폰트 -->
-    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-    <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
-    <title>Movie LOG</title>
-</head>
-<body>
-<div class="ttee">
-    <section class="hero is-warning">
-        <div class="hero-body">
-            <div class="container center">
-                <h1 class="title" style="padding-top: 70px">
-                    <a style="color: white" href="/">🍿Movie LOG🎥</a>
-                </h1>
+
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/latest/js/bootstrap.min.js"></script>
+        <!-- 구글폰트 -->
+        <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+        <title>Movie LOG</title>
+
+        <script>
+            // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+            function logout() {
+                $.removeCookie('mytoken', {path: '/'});
+                alert('로그아웃!')
+                window.location.href = "/"
+            }
+        </script>
+        <style>
+        </style>
+
+    </head>
+    <body>
+        <div class="ttee">
+            <section class="hero is-warning">
+                <div class="hero-body">
+                    <div class="container center">
+                        <h1 class="title"  style="padding-top: 70px">
+                            <a style="color: white" href="/">🍿Movie LOG🎥</a>
+                        </h1>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="wrapper">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary font-weight-bold" style="margin-bottom: 15px">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                영화 순위
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" onclick="rankLike()">좋아요 순😛</a>
+                                <a class="dropdown-item" onclick="rankDislike()">싫어요 순🥵</a>
+                                <a class="dropdown-item" onclick="rankReview()">리뷰 갯수⭐</a>
+                            </div>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">박스오피스 순위 <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item active" style="position: relative; left: 70%">
+                            <a class="nav-link" onclick="logout()">
+                                <u>로그아웃</u>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <hr class="border-warning">
+
+            <div style="text-align: center">
+                <h2 id="rank_review" style="display: none">⭐리뷰 랭킹⭐</h2>
+                <h2 id="rank_like" style="display: none">😛좋아요 랭킹😛</h2>
+                <h2 id="rank_dislike"style="display: none">🥵싫어요 랭킹🥵</h2>
+
             </div>
         </div>
     </section>

@@ -8,6 +8,7 @@ function getMovies() {
             $("#search_movie_lists").empty()
             response.forEach(function (movie_list) {
                 makeMovieList(movie_list);
+
             });
         }
     })
@@ -241,7 +242,7 @@ function rankReview() {
     $('#like-dislike').hide()
     $.ajax({
         type: "GET",
-        url: `/api/rank-review`,
+        url: `/api/rank-review?country=${test}`,
         data: {},
         success: (response) => {
             response.forEach(rank => makeRankList(rank, 'review'))
@@ -287,6 +288,7 @@ function get_today_rank(con) {
         }
     })
 }
+
 
 function makeTodayRankList(get_ko_rank) {
     let get_rank_html = `
