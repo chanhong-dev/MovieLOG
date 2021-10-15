@@ -244,21 +244,29 @@ function rankReview() {
         url: `/api/rank-review`,
         data: {},
         success: (response) => {
-            response.forEach(rank => makeRankList(rank, 'review'))
+            response.forEach(function (rank_review) {
+                makeRankList(rank_review, 'review');
+            });
         }
     })
 }
 
 function makeRankList(rank, type) {
+    let count
     let typeText
-    let count = rank['count']
-    let title = rank['title']
+    let title
     if (type === 'review') {
+        title = rank['_id']
+        count = rank['count']
         typeText = "리뷰"
     } else if (type === 'like') {
+        title = rank['title']
         typeText = "좋아요"
+        count = rank['like']
     } else if (type === 'dislike') {
+        title = rank['title']
         typeText = "싫어요"
+        count = rank['dislike']
     }
     let tmpHtml = `
         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -268,32 +276,35 @@ function makeRankList(rank, type) {
     $("#rank-list").append(tmpHtml);
 }
 
-function get_today_rank(test) {
-    $("#rank-list").empty();
+
+function get_today_rank(con) {
+    $("#rank-list").empty().show();
     $("#main_page").hide();
-    let country = test === 'ko' ? '한국' : '외국'
-    $("#this-is-title").text(`${country} 영화 박스오피스 순위`)
+    let country = con === 'ko' ? '🎬한국' : '🎬외국'
+    $("#this-is-title").text(`${country} 영화 박스오피스 순위🎬`)
     $('#detail_page').hide()
     $('#reviews').hide()
+    $('#like-dislike').hide()
     $.ajax({
         type: "GET",
-        url: `/api/today-rank?country=${test}`,
+        url: `/api/today-rank?country=${con}`,
         data: {},
         success: function (response) {
             response.forEach(function (get_ko_rank) {
-                makeTodayRankList(get_ko_rank);
+                makeToRankList(get_ko_rank);
             });
         }
     })
 }
 
-function makeTodayRankList(get_ko_rank) {
+function makeToRankList(get_ko_rank) {
     let get_rank_html = `
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            ${get_ko_rank['rank']}위                             
-        <br> 제목:  ${get_ko_rank['movieNm']}  
-             <br> 개봉일: ${get_ko_rank['openDt']} <br>                             
-             <br>  누적관객수: ${get_ko_rank['audiAcc']}명 <br> 
+           📈 ${get_ko_rank['rank']}위                             
+        <br> 📽제목:  ${get_ko_rank['movieNm']}  
+             <br> 📆개봉일: ${get_ko_rank['openDt']} <br>                             
+             <br>  👨‍👩‍👧‍👦누적관객수: ${get_ko_rank['audiAcc']}명 <br> 
+             <br> 📡 New Entry: ${get_ko_rank['rankOldAndNew']} <br> 
         </li>`
     $("#rank-list").append(get_rank_html);
 }
