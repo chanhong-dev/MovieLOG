@@ -123,6 +123,8 @@ function confirmDataLike() {
         success: function (response) {
             if (response['result'] === 0) {
                 insertLike();
+            } else if(response['result']===1){
+                alert("이미 좋아요를 눌르셨습니다");
             } else {
                 updateLike(response['title'], response['like'], response['dislike']);
             }
@@ -152,6 +154,8 @@ function confirmDataDislike() {
         success: function (response) {
             if (response['result'] === 0) {
                 insertDisLike();
+            }else if(response['result']===1){
+                alert("이미 싫어요를 누르셨습니다.")
             } else {
                 updateDisLike(response['title'], response['like'], response['dislike']);
             }

@@ -25,6 +25,7 @@
                     data: {
                         id_give: $('#userid').val(),
                         pw_give: $('#userpw').val(),
+                        pw_check_give: $('#userpw_check').val(),
                         nickname_give: $('#usernick').val()
                     },
                     success: function (response) {
@@ -34,7 +35,7 @@
                         } else {
                             alert(response['msg'])
                         }
-                    }
+                    },
                 })
             }
 
@@ -76,6 +77,18 @@
                         <div class="field">
                             <div class="control">
                                 <input type="password" class="input" id="userpw" placeholder="My Password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label" for="userpw_check">PW Check</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input type="password" class="input" id="userpw_check" placeholder="My Password Check">
                             </div>
                         </div>
                     </div>
