@@ -10,19 +10,21 @@ from flask import Flask, render_template, jsonify, request
 import urllib.request
 from urllib import request as r
 
+import user_validation as validation
+
 application = Flask(__name__)
 
 # 테스트 로컬
-# client = MongoClient('localhost', 27017)
-# client_id = "5Dvd8sOK7To6qEiPRBT9"
-# client_pw = "gNJwKPtZyX"
-# SECRET_KEY = 'SPARTA'
+client = MongoClient('localhost', 27017)
+client_id = "5Dvd8sOK7To6qEiPRBT9"
+client_pw = "gNJwKPtZyX"
+SECRET_KEY = 'SPARTA'
 
 # 배포
-client = MongoClient(os.environ.get("MONGO_DB_PATH"))
-client_id = os.environ.get("NAVER_CLIENT_ID")
-client_pw = os.environ.get("NAVER_CLIENT_PW")
-SECRET_KEY = os.environ.get("SECRET_KEY")
+#client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+#client_id = os.environ.get("NAVER_CLIENT_ID")
+#client_pw = os.environ.get("NAVER_CLIENT_PW")
+#SECRET_KEY = os.environ.get("SECRET_KEY")
 
 db = client.movielog
 
@@ -89,10 +91,21 @@ def save_reviews():
 def get_like():
     search_title = request.args.get('title')
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
-    if preference is None:
-        return jsonify({'result': 0})
+    #유저가 이미 등록했는지 확인
+    user=get_user()
+    userlike=db.userlike.find_one({'id':user['id'], 'title': search_title})
+    if(userlike==None):
+        db.userlike.save({'id':user['id'], 'title': search_title, 'type': "like"})
+        if preference is None:
+            return jsonify({'result': 0})
+        else:
+            return jsonify(preference)
+    elif(userlike['type']=='like'):
+        return jsonify({'result': 1})
     else:
-        return jsonify(preference)
+        db.userlike.update_one({"id":user['id'],'title':search_title},{'$set':{'type':"like"}})
+        db.likedislike.update_one({'title':search_title},{'$set':{'dislike':preference['dislike']-1,'like':preference['like']+1}})
+        return jsonify({'result':0})
 
 
 @application.route('/api/new-like', methods=['POST'])
@@ -120,10 +133,21 @@ def update_like():
 def get_dislike():
     search_title = request.args.get('title')
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
-    if preference is None:
-        return jsonify({'result': 0})
+    #유저가 이미 등록했는지 확인
+    user=get_user()
+    userlike=db.userlike.find_one({'id':user['id'], 'title': search_title})
+    if(userlike==None):
+        db.userlike.save({'id':user['id'], 'title': search_title, 'type': "dislike"})
+        if preference is None:
+            return jsonify({'result': 0})
+        else:
+            return jsonify(preference)
+    elif(userlike['type']=='dislike'):
+        return jsonify({'result': 1})
     else:
-        return jsonify(preference)
+        db.userlike.update_one({"id":user['id'],'title':search_title},{'$set':{'type':"dislike"}})
+        db.likedislike.update_one({'title':search_title},{'$set':{'dislike':preference['dislike']+1,'like':preference['like']-1}})
+        return jsonify({'result':0})
 
 
 @application.route('/api/new-dislike', methods=['POST'])
@@ -212,20 +236,37 @@ def login():
 def register():
     return render_template('register.html')
 
-
+##----##
 @application.route('/api/register', methods=['POST'])
 def api_register():
-    id_receive = request.form['id_give']
-    pw_receive = request.form['pw_give']
-    nickname_receive = request.form['nickname_give']
+    id_receive = request.form['id_give'].strip()
+    pw_receive = request.form['pw_give'].strip()
+    pw_check_receive = request.form['pw_check_give'].strip()
+    nickname_receive = request.form['nickname_give'].strip()
 
-    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+    validation_id=validation.validate_id(id_receive) 
+    exisiting_id=validation.is_exist_id(id_receive)
+    validation_pw=validation.validate_pw(pw_receive,pw_check_receive)
+    exisiting_nickname=validation.is_exist_nickname(nickname_receive)
+    #로그인 가능
+    if validation_id and validation_pw and not exisiting_id and not exisiting_nickname and len(nickname_receive)!=0:
+        pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+        db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
+        return jsonify({'result': 'success'})
+    
+    #로그인 실패
+    if not validation_id:
+        return jsonify({'result': "failure", 'msg': "아이디가 올바르지 않은 형식입니다."})
+    elif exisiting_id:
+        return jsonify({'result': "failure", 'msg': "이미 존재하는 아이디입니다"})
+    elif not validation_pw:
+        return jsonify({'result': "failure", 'msg': "입력된 두 비밀번호가 일치하지 않습니다."})
+    elif exisiting_nickname:
+        return jsonify({'result': "failure", 'msg': "이미 존재하는 닉네임입니다."})
+    elif len(nickname_receive)!=0:
+        return jsonify({'result': "failure", 'msg': "올바르지 않은 닉네임입니다."})
 
-    db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
-
-    return jsonify({'result': 'success'})
-
-
+##----##
 @application.route('/api/login', methods=['POST'])
 def api_login():
     id_receive = request.form['id_give']
