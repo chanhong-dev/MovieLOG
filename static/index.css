@@ -3,7 +3,7 @@
 }
 
 .wrapper {
-    width: 700px;
+    width: 800px;
     margin: 20px auto 0 auto;
 }
 
@@ -14,7 +14,7 @@
 
 .movie-info {
     margin: 0 auto;
-    width: 700px;
+    width: 800px;
 }
 
 h1 {
@@ -60,7 +60,7 @@ ul.list > li {
 }
 
 .list-box{
-    width: 700px;
+    width: 800px;
     float: left;
     margin-right: 25px;
 }
@@ -117,4 +117,13 @@ ul.list > li {
 thead { background-color: #FAF2CD;
     font-weight:bold;
         font-size: 15px;
+}
+
+.floating {
+    position: fixed;
+    right: 55%;
+    top: 30%;
+    margin-right: -800px;
+    text-align:center;
+    width: 12%;
 }
