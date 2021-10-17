@@ -1,3 +1,10 @@
+$(document).ready(function (){
+   $("#table").hide()
+    $('.dropdown-item kor').click(function (){
+         $("#table").show()
+        return false;
+    });
+});
 function getMovies() {
     let movie_title = $('#movie_name').val()
     $.ajax({
@@ -194,6 +201,7 @@ function updateDisLike(title, like, dislike) {
 }
 
 function rankLike() {
+    $("#table").hide();
     $("#this-is-title").text("😛좋아요 랭킹😛")
     $('#rank-list').empty().show()
     $('#main_page').hide()
@@ -213,6 +221,7 @@ function rankLike() {
 }
 
 function rankDislike() {
+    $("#table").hide();
     $("#this-is-title").text("🥵싫어요 랭킹🥵")
     $("#main_page").hide();
     $("#rank-list").empty().show()
@@ -233,6 +242,7 @@ function rankDislike() {
 
 
 function rankReview() {
+    $("#table").hide();
     $("#this-is-title").text("⭐리뷰 랭킹⭐")
     $("#main_page").hide();
     $("#rank-list").empty().show()
@@ -278,10 +288,11 @@ function makeRankList(rank, type) {
 
 
 function get_today_rank(con) {
+    $("#table").show();
     $("#rank-list").empty().show();
     $("#main_page").hide();
     let country = con === 'ko' ? '🎬한국' : '🎬외국'
-    $("#this-is-title").text(`${country} 영화 박스오피스 순위🎬`)
+    $("#this-is-title").text(`${country} 영화 실시간 박스오피스 순위🎬`)
     $('#detail_page').hide()
     $('#reviews').hide()
     $('#like-dislike').hide()
@@ -292,6 +303,8 @@ function get_today_rank(con) {
         success: function (response) {
             response.forEach(function (get_ko_rank) {
                 makeToRankList(get_ko_rank);
+
+
             });
         }
     })
@@ -299,12 +312,20 @@ function get_today_rank(con) {
 
 function makeToRankList(get_ko_rank) {
     let get_rank_html = `
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-           📈 ${get_ko_rank['rank']}위                             
-        <br> 📽제목:  ${get_ko_rank['movieNm']}  
-             <br> 📆개봉일: ${get_ko_rank['openDt']} <br>                             
-             <br>  👨‍👩‍👧‍👦누적관객수: ${get_ko_rank['audiAcc']}명 <br> 
-             <br> 📡 New Entry: ${get_ko_rank['rankOldAndNew']} <br> 
-        </li>`
+
+            <tr>
+            <td>${get_ko_rank['rank']}위</td>
+            <td>${get_ko_rank['movieNm']}</td>
+            <td>${get_ko_rank['openDt']}</td>           
+            <td>${get_ko_rank['audiAcc']} 명</td>
+            <td>${get_ko_rank['rankOldAndNew']}</td> 
+                </tr>
+`
     $("#rank-list").append(get_rank_html);
+
 }
+
+
+
+
+

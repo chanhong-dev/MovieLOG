@@ -3,7 +3,7 @@
 }
 
 .wrapper {
-    width: 700px;
+    width: 800px;
     margin: 20px auto 0 auto;
 }
 
@@ -84,3 +84,37 @@ ul.list > li {
     margin-bottom: 10px;
     border-bottom: 2px solid;
 }
+
+
+{
+  box-sizing: border-box;
+}
+
+/* Create a two-column layout */
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.table{
+    width: 120%;
+}
+
+.table > thead > tr >  .rank { width: 10%; }
+
+
+#table { display: none;}
+
+.title { width:20%; }
+
+thead { background-color: #FAF2CD;
+        font-size: 15px;
+}
+
