@@ -315,10 +315,10 @@ function makeToRankList(get_ko_rank) {
 
             <tr>
             <td>${get_ko_rank['rank']}위</td>
-            <td>${get_ko_rank['movieNm']}</td>
+            <td>${get_ko_rank['movieNm']} <span style=" color:red; font-size:x-small; font-weight: 900;">${get_ko_rank['rankOldAndNew']==="NEW" ? "NEW" :  ""}</span></td>
             <td>${get_ko_rank['openDt']}</td>           
-            <td>${get_ko_rank['audiAcc']} 명</td>
-            <td>${get_ko_rank['rankOldAndNew']}</td> 
+            <td>${Number(get_ko_rank['audiAcc']).toLocaleString("ko-KR")} 명</td>  
+                      
                 </tr>
 `
     $("#rank-list").append(get_rank_html);

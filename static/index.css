@@ -112,7 +112,7 @@ ul.list > li {
 
 #table { display: none;}
 
-.title { width:20%; }
+.name { width:50%; }
 
 thead { background-color: #FAF2CD;
     font-weight:bold;
