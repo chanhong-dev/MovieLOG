@@ -103,9 +103,10 @@ def get_like():
     elif(userlike['type']=='like'):
         return jsonify({'result': 1})
     else:
-        db.userlike.update_one({"id":user['id'],'title':search_title},{'$set':{'type':"like"}})
-        db.likedislike.update_one({'title':search_title},{'$set':{'dislike':preference['dislike']-1,'like':preference['like']+1}})
-        return jsonify({'result':0})
+        db.userlike.update_one({"id": user['id'], 'title': search_title}, {'$set': {'type': "like"}})
+        db.likedislike.update_one({'title': search_title}, {'$set': {'dislike': preference['dislike']-1,
+                                                                     'like': preference['like']+1}})
+        return jsonify({'result': 0})
 
 
 @application.route('/api/new-like', methods=['POST'])
@@ -133,20 +134,21 @@ def update_like():
 def get_dislike():
     search_title = request.args.get('title')
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
-    #유저가 이미 등록했는지 확인
-    user=get_user()
+    # 유저가 이미 등록했는지 확인
+    user = get_user()
     userlike=db.userlike.find_one({'id':user['id'], 'title': search_title})
-    if(userlike==None):
+    if userlike is None:
         db.userlike.save({'id':user['id'], 'title': search_title, 'type': "dislike"})
         if preference is None:
             return jsonify({'result': 0})
         else:
             return jsonify(preference)
-    elif(userlike['type']=='dislike'):
+    elif userlike['type']=='dislike':
         return jsonify({'result': 1})
     else:
-        db.userlike.update_one({"id":user['id'],'title':search_title},{'$set':{'type':"dislike"}})
-        db.likedislike.update_one({'title':search_title},{'$set':{'dislike':preference['dislike']+1,'like':preference['like']-1}})
+        db.userlike.update_one({"id": user['id'],'title': search_title},{'$set': {'type': "dislike"}})
+        db.likedislike.update_one({'title': search_title}, {'$set':{'dislike': preference['dislike']+1,
+                                                                'like': preference['like']-1}})
         return jsonify({'result':0})
 
 
@@ -236,7 +238,7 @@ def login():
 def register():
     return render_template('register.html')
 
-##----##
+
 @application.route('/api/register', methods=['POST'])
 def api_register():
     id_receive = request.form['id_give'].strip()
@@ -244,17 +246,17 @@ def api_register():
     pw_check_receive = request.form['pw_check_give'].strip()
     nickname_receive = request.form['nickname_give'].strip()
 
-    validation_id=validation.validate_id(id_receive) 
-    exisiting_id=validation.is_exist_id(id_receive)
-    validation_pw=validation.validate_pw(pw_receive,pw_check_receive)
-    exisiting_nickname=validation.is_exist_nickname(nickname_receive)
-    #로그인 가능
-    if validation_id and validation_pw and not exisiting_id and not exisiting_nickname and len(nickname_receive)!=0:
+    validation_id = validation.validate_id(id_receive)
+    exisiting_id = validation.is_exist_id(id_receive)
+    validation_pw = validation.validate_pw(pw_receive,pw_check_receive)
+    exisiting_nickname = validation.is_exist_nickname(nickname_receive)
+    # 로그인 가능
+    if validation_id and validation_pw and not exisiting_id and not exisiting_nickname and len(nickname_receive) != 0:
         pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
         db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
         return jsonify({'result': 'success'})
     
-    #로그인 실패
+    # 로그인 실패
     if not validation_id:
         return jsonify({'result': "failure", 'msg': "아이디가 올바르지 않은 형식입니다."})
     elif exisiting_id:
@@ -266,7 +268,7 @@ def api_register():
     elif len(nickname_receive)!=0:
         return jsonify({'result': "failure", 'msg': "올바르지 않은 닉네임입니다."})
 
-##----##
+
 @application.route('/api/login', methods=['POST'])
 def api_login():
     id_receive = request.form['id_give']
