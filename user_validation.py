@@ -1,7 +1,7 @@
 from flask.scaffold import F
 from pymongo import MongoClient
 from pymongo import MongoClient
-
+import os
 
 client = MongoClient(os.environ.get("MONGO_DB_PATH"))
 db = client.movielog
