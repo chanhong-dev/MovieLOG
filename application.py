@@ -330,10 +330,12 @@ def show_bookmark():
 @application.route('/api/add-bookmark', methods=['POST'])
 def add_bookmark():
     title_receive = request.form['title']
+    link_receive = request.form['link']
     user = get_user()
     doc = {
         'id': user['id'],
-        'title': title_receive
+        'title': title_receive,
+        'link': link_receive
     }
     bookmarks = db.bookmark.find({'id': user['id'], 'title': title_receive}, {'_id': False}).count()
 

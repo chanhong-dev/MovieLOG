@@ -49,7 +49,7 @@ function detailMovie(title, image, pubDate, director, actor, userRating, link, s
                         <h4 class="card-title" style="margin-bottom: auto;">${subtitle}</h4>
                         <br/>
                         <ul class="list" >
-                            <button style="float: right" onclick="bookmark('${title}')" type="button" class="" id="bookmark-btn">북마크</button>
+                            <button style="float: right" onclick="bookmark('${title}', '${link}')" type="button" class="" id="bookmark-btn">북마크</button>
                             <li class="card-text">개봉 >${pubDate}</li>
                             <li class="card-text">감독 >${director}</li>
                             <li class="card-text">배우 >${actor}</li>
@@ -339,17 +339,7 @@ function makeToRankList(get_ko_rank) {
 
 }
 
-function makeBookmark(title) {
-    let bookmark_html = `<li class="list-group-item">
-                            <span style="float: left">${title}</span>
-                            <span style="margin-left: 5%; float: right" type="button" class="btn btn-danger btn-sm"
-                                  onclick="delete_bookmark('${title}')">삭제</span>
-                        </li>`
-
-    $("#bookmark-list").append(bookmark_html);
-}
-
-function bookmark(title){
+function bookmark(title, link){
     let bookmark_status = $('[id="bookmark-btn"]').attr('class');
 
     if (bookmark_status === 'btn-secondary') {
@@ -357,7 +347,7 @@ function bookmark(title){
         $.ajax({
             type: "POST",
             url: `/api/add-bookmark`,
-            data: {title: title},
+            data: {title: title, link: link},
             success: function (response) {
                 alert(response["success"]);
                 $("#bookmark-list").empty()
@@ -391,8 +381,18 @@ function main_bookmark(){
         data: {},
         success: function (response) {
             response.forEach(function (bookmark) {
-                makeBookmark(bookmark['title'])
+                makeBookmark(bookmark['title'], bookmark['link'])
             });
         }
     })
+}
+
+function makeBookmark(title, link) {
+    let bookmark_html = `<li class="list-group-item">
+                            <span onclick="location.href='${link}'" style="float: left" >${title}</span>
+                            <span style="margin-left: 5%; float: right" type="button" class="btn btn-danger btn-sm"
+                                  onclick="delete_bookmark('${title}')">삭제</span>
+                        </li>`
+
+    $("#bookmark-list").append(bookmark_html);
 }
