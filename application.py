@@ -15,16 +15,18 @@ import user_validation as validation
 application = Flask(__name__)
 
 # 테스트 로컬
-# client = MongoClient('localhost', 27017)
-# client_id = "5Dvd8sOK7To6qEiPRBT9"
-# client_pw = "gNJwKPtZyX"
-# SECRET_KEY = 'SPARTA'
+client = MongoClient('localhost', 27017)
+client_id = "5Dvd8sOK7To6qEiPRBT9"
+client_pw = "gNJwKPtZyX"
+SECRET_KEY = 'SPARTA'
+
+# user_validation.py db경로도 바꿔주어야 함.
 
 # 배포
-client = MongoClient(os.environ.get("MONGO_DB_PATH"))
-client_id = os.environ.get("NAVER_CLIENT_ID")
-client_pw = os.environ.get("NAVER_CLIENT_PW")
-SECRET_KEY = os.environ.get("SECRET_KEY")
+# client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+# client_id = os.environ.get("NAVER_CLIENT_ID")
+# client_pw = os.environ.get("NAVER_CLIENT_PW")
+# SECRET_KEY = os.environ.get("SECRET_KEY")
 
 db = client.movielog
 
@@ -314,6 +316,52 @@ def get_user():
     userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
 
     return userinfo
+
+
+@application.route('/api/show-bookmark', methods=['GET'])
+def show_bookmark():
+    user = get_user()
+
+    bookmarks = list(db.bookmark.find({'id': user['id']}, {'_id': False}))
+
+    return jsonify(bookmarks)
+
+
+@application.route('/api/add-bookmark', methods=['POST'])
+def add_bookmark():
+    title_receive = request.form['title']
+    user = get_user()
+    doc = {
+        'id': user['id'],
+        'title': title_receive
+    }
+    bookmarks = db.bookmark.find({'id': user['id'], 'title': title_receive}, {'_id': False}).count()
+
+    if bookmarks == 0:
+        db.bookmark.insert_one(doc)
+
+    return jsonify({'success': '즐겨찾기 추가 완료!'})
+
+
+@application.route('/api/delete-bookmark', methods=['POST'])
+def delete_bookmark():
+    title_receive = request.form['title']
+    user = get_user()
+
+    db.bookmark.delete_one({'id': user['id'], 'title': title_receive})
+    return jsonify({'success': '즐겨찾기 삭제 완료!'})
+
+
+@application.route('/api/get-bookmark', methods=['GET'])
+def get_bookmark():
+    user = get_user()
+    search_title = request.args.get('title')
+    bookmark = (db.bookmark.find({'id': user['id'], 'title': search_title}, {'_id': False})).count()
+
+    if bookmark == 0:
+        return jsonify({'result': 0})
+    else:
+        return jsonify({'result': 1})
 
 
 if __name__ == '__main__':

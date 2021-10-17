@@ -17,7 +17,7 @@ function getMovies() {
 function makeMovieList(movie_info) {
     movie_info['title'] = movie_info['title'].replace("<b>", "").replace("</b>", "")
     let movie_list_html = `
-        <div class="card border-info mb-3" style="max-width: 700px;">
+        <div class="card border-info mb-3" style="max-width: 800px;">
             <div class="row g-0" id="movie_info" onclick="detailMovie('${movie_info['title']}','${movie_info['image']}','${movie_info['pubDate']}','${movie_info['director']}','${movie_info['actor']}','${movie_info['userRating']}','${movie_info['link']}','${movie_info['subtitle']}')">
                 <div class="col-md-4">
                     <img src="${movie_info['image']}" class="img-fluid rounded-start" alt="..." >
@@ -49,6 +49,7 @@ function detailMovie(title, image, pubDate, director, actor, userRating, link, s
                         <h4 class="card-title" style="margin-bottom: auto;">${subtitle}</h4>
                         <br/>
                         <ul class="list" >
+                            <button style="float: right" onclick="bookmark('${title}')" type="button" class="" id="bookmark-btn">북마크</button>
                             <li class="card-text">개봉 >${pubDate}</li>
                             <li class="card-text">감독 >${director}</li>
                             <li class="card-text">배우 >${actor}</li>
@@ -60,8 +61,25 @@ function detailMovie(title, image, pubDate, director, actor, userRating, link, s
             </div>
         </div>`
     $("#detail_page").append(detail_movie_info);
+    getBookmark(title)
     getReviews()
     getCount(title)
+}
+
+function getBookmark(title){
+    $.ajax({
+        type: "GET",
+        url: `/api/get-bookmark?title=${title}`,
+        data: {},
+        success: function (response) {
+            if(response['result'] === 0 ){
+                $('[id="bookmark-btn"]').attr('class', 'btn-secondary')
+            }
+            else{
+                $('[id="bookmark-btn"]').attr('class', 'btn-primary')
+            }
+        }
+    })
 }
 
 function getCount(title) {
@@ -199,6 +217,7 @@ function updateDisLike(title, like, dislike) {
 }
 
 function rankLike() {
+    $("#table").hide();
     $("#this-is-title").text("😛좋아요 랭킹😛")
     $('#rank-list').empty().show()
     $('#main_page').hide()
@@ -218,6 +237,7 @@ function rankLike() {
 }
 
 function rankDislike() {
+    $("#table").hide();
     $("#this-is-title").text("🥵싫어요 랭킹🥵")
     $("#main_page").hide();
     $("#rank-list").empty().show()
@@ -238,6 +258,7 @@ function rankDislike() {
 
 
 function rankReview() {
+    $("#table").hide();
     $("#this-is-title").text("⭐리뷰 랭킹⭐")
     $("#main_page").hide();
     $("#rank-list").empty().show()
@@ -316,4 +337,60 @@ function makeToRankList(get_ko_rank) {
 `
     $("#rank-list").append(get_rank_html);
 
+}
+
+function makeBookmark(title) {
+    let bookmark_html = `<li class="list-group-item">${title}
+                            <span style="margin-left: 5%" type="button" class="btn btn-danger" onclick="delete_bookmark('${title}')">삭제</span>
+                            </li>`
+
+    $("#bookmark-list").append(bookmark_html);
+}
+
+function bookmark(title){
+    let bookmark_status = $('[id="bookmark-btn"]').attr('class');
+
+    if (bookmark_status === 'btn-secondary') {
+        $('[id="bookmark-btn"]').attr('class', 'btn-primary');
+        $.ajax({
+            type: "POST",
+            url: `/api/add-bookmark`,
+            data: {title: title},
+            success: function (response) {
+                alert(response["success"]);
+                $("#bookmark-list").empty()
+                main_bookmark()
+            }
+        })
+    }
+    else{
+        delete_bookmark(title)
+    }
+}
+
+function delete_bookmark(title) {
+    $('[id="bookmark-btn"]').attr('class', 'btn-secondary');
+    $.ajax({
+        type: "POST",
+        url: `/api/delete-bookmark`,
+        data: {title: title},
+        success: function (response) {
+            alert(response["success"]);
+            $("#bookmark-list").empty()
+            main_bookmark()
+        }
+    })
+}
+
+function main_bookmark(){
+    $.ajax({
+        type: "GET",
+        url: `/api/show-bookmark`,
+        data: {},
+        success: function (response) {
+            response.forEach(function (bookmark) {
+                makeBookmark(bookmark['title'])
+            });
+        }
+    })
 }
