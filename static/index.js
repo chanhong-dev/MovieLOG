@@ -340,9 +340,11 @@ function makeToRankList(get_ko_rank) {
 }
 
 function makeBookmark(title) {
-    let bookmark_html = `<li class="list-group-item">${title}
-                            <span style="margin-left: 5%" type="button" class="btn btn-danger" onclick="delete_bookmark('${title}')">삭제</span>
-                            </li>`
+    let bookmark_html = `<li class="list-group-item">
+                            <span style="float: left">${title}</span>
+                            <span style="margin-left: 5%; float: right" type="button" class="btn btn-danger btn-sm"
+                                  onclick="delete_bookmark('${title}')">삭제</span>
+                        </li>`
 
     $("#bookmark-list").append(bookmark_html);
 }
