@@ -91,16 +91,16 @@ def save_reviews():
 def get_like():
     search_title = request.args.get('title')
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
-    #유저가 이미 등록했는지 확인
-    user=get_user()
-    userlike=db.userlike.find_one({'id':user['id'], 'title': search_title})
-    if(userlike==None):
+    # 유저가 이미 등록했는지 확인
+    user = get_user()
+    userlike = db.userlike.find_one({'id':user['id'], 'title': search_title})
+    if userlike is None:
         db.userlike.save({'id':user['id'], 'title': search_title, 'type': "like"})
         if preference is None:
             return jsonify({'result': 0})
         else:
             return jsonify(preference)
-    elif(userlike['type']=='like'):
+    elif userlike['type'] == 'like':
         return jsonify({'result': 1})
     else:
         db.userlike.update_one({"id": user['id'], 'title': search_title}, {'$set': {'type': "like"}})
@@ -136,7 +136,7 @@ def get_dislike():
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
     # 유저가 이미 등록했는지 확인
     user = get_user()
-    userlike=db.userlike.find_one({'id':user['id'], 'title': search_title})
+    userlike = db.userlike.find_one({'id':user['id'], 'title': search_title})
     if userlike is None:
         db.userlike.save({'id':user['id'], 'title': search_title, 'type': "dislike"})
         if preference is None:
