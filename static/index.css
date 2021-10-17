@@ -115,6 +115,7 @@ ul.list > li {
 .title { width:20%; }
 
 thead { background-color: #FAF2CD;
+    font-weight:bold;
         font-size: 15px;
 }
 
