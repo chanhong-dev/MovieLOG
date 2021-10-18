@@ -93,20 +93,14 @@ def save_reviews():
     return jsonify({'success': '리뷰 저장 완료!'})
 
 
-@application.route('/reviewss', methods=['DELETE'])
-def delete_post():
+@application.route('/api/delete-review', methods=['POST'])
+def delete_review():
     title_receive = request.form['title']
     review_receive = request.form['review']
     user = get_user()
-    db.moviereview.deleteMany({'id': user['id'], 'title': title_receive, 'review': review_receive})
+    db.moviereview.delete_one({'id': user['id'], 'title': title_receive, 'review': review_receive})
 
-    return {"result": "삭제완료"}
-
-@application.route('/api/review-p', methods=['GET'])
-def get_review():
-    idx = request.args['idx']
-    article = db.moviereview.find_one({'idx': int(idx)}, {'_id': False})
-    return jsonify({"article": article})
+    return jsonify({"result": "success"})
 
 
 @application.route('/api/confirm-like', methods=['GET'])

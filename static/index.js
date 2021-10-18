@@ -129,7 +129,7 @@ function saveReview() {
 function makeReviewList(review) {
     let review_list_html = `<tr><td>>${review['id']} </td>
                         <td>${review['review']} </td>                                       
-                     <td><button type="button" class="btn btn-danger" onclick="deleteArticle()">삭제</button></td>
+                     <td><button type="button" class="btn btn-danger" onclick="deleteArticle('${review['title']}', '${review['review']}')">삭제</button></td>
                      <td><button type="button" class="btn btn-primary" onclick="">수정</button></td></tr>`
     // getArticle(${post['idx']})
 
@@ -137,15 +137,15 @@ function makeReviewList(review) {
     $("#review_list").append(review_list_html);
 }
 
-function deleteArticle() {
+function deleteArticle(title, contents) {
     $.ajax({
-        type: "DELETE",
-        url: `/reviews-d`,
-        data: {title: title, review: review},
+        type: "post",
+        url: `api/delete-review`,
+        data: {title: title , review: contents },
         success: function (response) { // 성공하면
-            if (response["result"] == "success") {
+            if (response["result"] === "success") {
                 alert("삭제 성공!");
-                window.location.reload();
+                getReviews()
             } else {
                 alert("서버 오류!");
             }

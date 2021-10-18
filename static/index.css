@@ -127,3 +127,7 @@ thead { background-color: #FAF2CD;
     text-align:center;
     width: 12%;
 }
+
+
+.review_box { margin:0;
+              padding: 20px;}
