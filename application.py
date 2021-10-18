@@ -93,6 +93,21 @@ def save_reviews():
     return jsonify({'success': '리뷰 저장 완료!'})
 
 
+@application.route('/api/update-review', methods=['POST'])
+def update_review():
+    id_receive = request.form['id']
+    title_receive = request.form['title']
+    review_receive = request.form['review']
+    fix_receive = request.form['fix']
+    user = get_user()
+    if user['id'] == id_receive:
+        db.moviereview.update_one({'id': user['id'], 'title': title_receive, 'review': review_receive},
+                                  {'$set': {'review': fix_receive}})
+        return jsonify({"result": "success"})
+    else:
+        return jsonify({"result": "fail"})
+
+
 @application.route('/api/delete-review', methods=['POST'])
 def delete_review():
     title_receive = request.form['title']

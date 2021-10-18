@@ -127,17 +127,36 @@ function saveReview() {
 }
 
 function makeReviewList(review) {
-    let review_list_html = `<tr><td>>${review['id']} </td>
+    let review_list_html = `<tr><td>${review['id']} </td>
                         <td>${review['review']} </td>                                       
-                     <td><button type="button" class="btn btn-danger" onclick="deleteArticle('${review['title']}', '${review['review']}')">삭제</button></td>
-                     <td><button type="button" class="btn btn-primary" onclick="">수정</button></td></tr>`
-    // getArticle(${post['idx']})
-
-
+                     <td><button type="button" class="btn btn-danger" onclick="deleteReview('${review['title']}', '${review['review']}')">삭제</button></td>
+                     <td><button type="button" class="btn btn-primary" onclick="updateReview('${review['id']}', '${review['title']}', '${review['review']}')">수정</button></td></tr>`
     $("#review_list").append(review_list_html);
 }
 
-function deleteArticle(title, contents) {
+function updateReview(id, title, contents) {
+    let fix = prompt("수정할 내용을 입력해주세요!\n\n"+contents)
+
+    if(fix == null || fix === '')
+        return
+    $.ajax({
+        type: "post",
+        url: `api/update-review`,
+        data: {id: id,title: title , review: contents, fix: fix},
+        success: function (response) { // 성공하면
+            if (response["result"] === "success") {
+                alert("수정 완료!");
+                getReviews()
+            } else if(response["result"] === "fail"){
+                alert("다른 사람의 리뷰는 수정할 수 없습니다!")
+            } else {
+                alert("서버 오류!");
+            }
+        }
+    })
+}
+
+function deleteReview(title, contents) {
     $.ajax({
         type: "post",
         url: `api/delete-review`,
