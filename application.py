@@ -46,7 +46,6 @@ def home():
         return render_template('login.html')
 
 
-
 @application.route('/api/movies', methods=['GET'])
 def get_movies():
     search_title = request.args.get('movie')
@@ -185,7 +184,7 @@ def get_dislike():
     else:
         db.userlike.update_one({"id": user['id'], 'title': search_title}, {'$set': {'type': "dislike"}})
         db.likedislike.update_one({'title': search_title}, {'$set': {'dislike': preference['dislike']+1,
-                                                                'like': preference['like']-1}})
+                                                                 'like': preference['like']-1}})
         return jsonify({'result': 2})
     # 여기 위에 부분이에요 찬호님
 
@@ -262,7 +261,7 @@ def get_today_rank():
         movie_list = response_body.decode('utf-8')
         json_movie_lists = json.loads(movie_list)
         rank = json_movie_lists['boxOfficeResult']
-        print(rank['dailyBoxOfficeList'])
+
     return jsonify(rank['dailyBoxOfficeList'])
 
 
@@ -286,7 +285,7 @@ def api_register():
 
     validation_id = validation.validate_id(id_receive)
     exisiting_id = validation.is_exist_id(id_receive)
-    validation_pw = validation.validate_pw(pw_receive,pw_check_receive)
+    validation_pw = validation.validate_pw(pw_receive, pw_check_receive)
     exisiting_nickname = validation.is_exist_nickname(nickname_receive)
     # 로그인 가능
     if validation_id and validation_pw and not exisiting_id and not exisiting_nickname and len(nickname_receive) != 0:
@@ -303,7 +302,7 @@ def api_register():
         return jsonify({'result': "failure", 'msg': "입력된 두 비밀번호가 일치하지 않습니다."})
     elif exisiting_nickname:
         return jsonify({'result': "failure", 'msg': "이미 존재하는 닉네임입니다."})
-    elif len(nickname_receive)!=0:
+    elif len(nickname_receive) != 0:
         return jsonify({'result': "failure", 'msg': "올바르지 않은 닉네임입니다."})
 
 
@@ -402,9 +401,6 @@ def get_bookmark():
         return jsonify({'result': 1})
 
 
-
 if __name__ == '__main__':
     application.debug = True
     application.run()
-
-
