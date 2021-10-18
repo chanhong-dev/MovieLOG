@@ -78,7 +78,7 @@ def get_reviews():
     return jsonify(reviews)
 
 
-@application.route('/api/review', methods=['POST'])
+@application.route('/api/save-review', methods=['POST'])
 def save_reviews():
     title_receive = request.form['title']
     review_receive = request.form['review']
@@ -110,12 +110,16 @@ def update_review():
 
 @application.route('/api/delete-review', methods=['POST'])
 def delete_review():
+    id_receive = request.form['id']
     title_receive = request.form['title']
     review_receive = request.form['review']
     user = get_user()
-    db.moviereview.delete_one({'id': user['id'], 'title': title_receive, 'review': review_receive})
 
-    return jsonify({"result": "success"})
+    if user['id'] == id_receive:
+        db.moviereview.delete_one({'id': user['id'], 'title': title_receive, 'review': review_receive})
+        return jsonify({"result": "success"})
+    else:
+        return jsonify({"result": "fail"})
 
 
 @application.route('/api/confirm-like', methods=['GET'])
@@ -124,7 +128,7 @@ def get_like():
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
     # 유저가 이미 등록했는지 확인
     user = get_user()
-    userlike = db.userlike.find_one({'id':user['id'], 'title': search_title})
+    userlike = db.userlike.find_one({'id': user['id'], 'title': search_title})
     if userlike is None:
         db.userlike.save({'id':user['id'], 'title': search_title, 'type': "like"})
         if preference is None:
