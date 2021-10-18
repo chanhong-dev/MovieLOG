@@ -130,18 +130,20 @@ def get_like():
     user = get_user()
     userlike = db.userlike.find_one({'id': user['id'], 'title': search_title})
     if userlike is None:
-        db.userlike.save({'id':user['id'], 'title': search_title, 'type': "like"})
+        db.userlike.save({'id': user['id'], 'title': search_title, 'type': "like"})
         if preference is None:
             return jsonify({'result': 0})
         else:
             return jsonify(preference)
+    # 이미 좋아요를 눌렀을 때
     elif userlike['type'] == 'like':
         return jsonify({'result': 1})
     else:
         db.userlike.update_one({"id": user['id'], 'title': search_title}, {'$set': {'type': "like"}})
         db.likedislike.update_one({'title': search_title}, {'$set': {'dislike': preference['dislike']-1,
                                                                      'like': preference['like']+1}})
-        return jsonify({'result': 0})
+        return jsonify({'result': 2})
+    # 여기 위에 부분이에요 찬호님
 
 
 @application.route('/api/new-like', methods=['POST'])
@@ -171,20 +173,21 @@ def get_dislike():
     preference = db.likedislike.find_one({'title': search_title}, {'_id': False})
     # 유저가 이미 등록했는지 확인
     user = get_user()
-    userlike = db.userlike.find_one({'id':user['id'], 'title': search_title})
+    userlike = db.userlike.find_one({'id': user['id'], 'title': search_title})
     if userlike is None:
-        db.userlike.save({'id':user['id'], 'title': search_title, 'type': "dislike"})
+        db.userlike.save({'id': user['id'], 'title': search_title, 'type': "dislike"})
         if preference is None:
             return jsonify({'result': 0})
         else:
             return jsonify(preference)
-    elif userlike['type']=='dislike':
+    elif userlike['type'] == 'dislike':
         return jsonify({'result': 1})
     else:
-        db.userlike.update_one({"id": user['id'],'title': search_title},{'$set': {'type': "dislike"}})
-        db.likedislike.update_one({'title': search_title}, {'$set':{'dislike': preference['dislike']+1,
+        db.userlike.update_one({"id": user['id'], 'title': search_title}, {'$set': {'type': "dislike"}})
+        db.likedislike.update_one({'title': search_title}, {'$set': {'dislike': preference['dislike']+1,
                                                                 'like': preference['like']-1}})
-        return jsonify({'result':0})
+        return jsonify({'result': 2})
+    # 여기 위에 부분이에요 찬호님
 
 
 @application.route('/api/new-dislike', methods=['POST'])

@@ -186,6 +186,8 @@ function confirmDataLike() {
                 insertLike();
             } else if(response['result']===1){
                 alert("이미 좋아요를 눌르셨습니다");
+            } else if(response['result']===2){           // 여기 위에 부분이에요 찬호님
+                alert("좋아요 변경 완료");
             } else {
                 updateLike(response['title'], response['like'], response['dislike']);
             }
@@ -217,7 +219,9 @@ function confirmDataDislike() {
                 insertDisLike();
             }else if(response['result']===1){
                 alert("이미 싫어요를 누르셨습니다.")
-            } else {
+            } else if(response['result']===2){           // 여기 위에 부분이에요 찬호님
+                alert("싫어요 변경 완료");
+            }else {
                 updateDisLike(response['title'], response['like'], response['dislike']);
             }
             getCount(title)
@@ -336,6 +340,10 @@ function makeRankList(rank, type) {
         title = rank['title']
         typeText = "싫어요"
         count = rank['dislike']
+    }
+    // 여기 위에 부분이에요 찬호님
+    if( count === 0 ){
+        return
     }
     let tmpHtml = `
         <li class="list-group-item d-flex justify-content-between align-items-center">
