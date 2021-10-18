@@ -127,9 +127,30 @@ function saveReview() {
 }
 
 function makeReviewList(review) {
-    let review_list_html = `<li style="padding-bottom: 10px">${review['review']}</li>`
+    let review_list_html = `<tr><td>>${review['id']} </td>
+                        <td>${review['review']} </td>                                       
+                     <td><button type="button" class="btn btn-danger" onclick="deleteArticle()">삭제</button></td>
+                     <td><button type="button" class="btn btn-primary" onclick="">수정</button></td></tr>`
+    // getArticle(${post['idx']})
+
 
     $("#review_list").append(review_list_html);
+}
+
+function deleteArticle() {
+    $.ajax({
+        type: "DELETE",
+        url: `/reviewss`,
+        data: {title: title, review: review},
+        success: function (response) { // 성공하면
+            if (response["result"] == "success") {
+                alert("삭제 성공!");
+                window.location.reload();
+            } else {
+                alert("서버 오류!");
+            }
+        }
+    })
 }
 
 function confirmDataLike() {

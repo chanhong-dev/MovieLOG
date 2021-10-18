@@ -3,7 +3,8 @@ from pymongo import MongoClient
 from pymongo import MongoClient
 import os
 
-client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+client = MongoClient('localhost', 27017)
+#client = MongoClient(os.environ.get("MONGO_DB_PATH"))
 db = client.movielog
 
 
