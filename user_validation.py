@@ -3,10 +3,12 @@ from pymongo import MongoClient
 from pymongo import MongoClient
 import os
 
+
 # 로컬
 # client = MongoClient('localhost', 27017)
 # 배포
 client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+
 db = client.movielog
 
 

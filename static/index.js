@@ -116,7 +116,7 @@ function saveReview() {
 
     $.ajax({
         type: "POST",
-        url: `/api/review`,
+        url: `/api/save-review`,
         data: {title: title, review: review},
         success: function (response) {
             alert(response["success"]);
@@ -127,9 +127,52 @@ function saveReview() {
 }
 
 function makeReviewList(review) {
-    let review_list_html = `<li style="padding-bottom: 10px">${review['review']}</li>`
+    let review_list_html = `<tr><td>${review['id']} </td>
+                        <td>${review['review']} </td>  
+                     <td><button type="button" class="btn btn-outline-primary btn-sm edit"  onclick="updateReview('${review['id']}', '${review['title']}', '${review['review']}')">수정</button></td>       
+                     <td><button type="button" class="btn btn-outline-danger btn-sm edit" onclick="deleteReview('${review['id']}', '${review['title']}', '${review['review']}')">삭제</button></td></tr>`
+                   $("#review_list").append(review_list_html);
+}
 
-    $("#review_list").append(review_list_html);
+
+function updateReview(id, title, contents) {
+    let fix = prompt("수정할 내용을 입력해주세요!\n\n기존 내용\n[" + contents + "]")
+
+    if (fix == null || fix === '')
+        return
+    $.ajax({
+        type: "post",
+        url: `api/update-review`,
+        data: {id: id, title: title, review: contents, fix: fix},
+        success: function (response) { // 성공하면
+            if (response["result"] === "success") {
+                alert("수정 완료!");
+                getReviews()
+            } else if (response["result"] === "fail") {
+                alert("다른 사람의 리뷰는 수정할 수 없습니다!")
+            } else {
+                alert("서버 오류!");
+            }
+        }
+    })
+}
+
+function deleteReview(id, title, contents) {
+    $.ajax({
+        type: "post",
+        url: `api/delete-review`,
+        data: {id: id, title: title , review: contents },
+        success: function (response) { // 성공하면
+            if (response["result"] === "success") {
+                alert("삭제 성공!");
+                getReviews()
+            }else if(response["result"] === "fail"){
+                alert("다른 사람의 리뷰는 삭제할 수 없습니다!")
+            } else {
+                alert("서버 오류!");
+            }
+        }
+    })
 }
 
 function confirmDataLike() {
@@ -401,6 +444,4 @@ function makeBookmark(title, link) {
                             <span style="margin-left: 5%; float: right" type="button" class="btn btn-danger btn-sm"
                                   onclick="delete_bookmark('${title}')">삭제</span>
                         </li>`
-
-    $("#bookmark-list").append(bookmark_html);
-}
+    $("#bookmark-list").append(bookmark_html);}

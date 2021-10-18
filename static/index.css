@@ -104,7 +104,7 @@ ul.list > li {
   display: table;
 }
 .table{
-    width: 120%;
+    width: 800px;
 }
 
 .table > thead > tr >  .rank { width: 10%; }
@@ -126,4 +126,20 @@ thead { background-color: #FAF2CD;
     margin-right: -800px;
     text-align:center;
     width: 12%;
+}
+
+
+.review_box { margin:0;
+              padding: 20px;}
+
+.writer {
+    width:100px;
+}
+
+.review_content{
+    width:500px;
+}
+
+.edit{
+    text-align:center;
 }
