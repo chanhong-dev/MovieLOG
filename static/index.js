@@ -128,26 +128,27 @@ function saveReview() {
 
 function makeReviewList(review) {
     let review_list_html = `<tr><td>${review['id']} </td>
-                        <td>${review['review']} </td>                                       
-                     <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteReview('${review['id']}', '${review['title']}', '${review['review']}')">삭제</button></td>
-                     <td><button type="button" class="btn btn-outline-primary btn-sm" onclick="updateReview('${review['id']}', '${review['title']}', '${review['review']}')">수정</button></td></tr>`
-    $("#review_list").append(review_list_html);
+                        <td>${review['review']} </td>  
+                     <td><button type="button" class="btn btn-outline-primary btn-sm edit"  onclick="updateReview('${review['id']}', '${review['title']}', '${review['review']}')">수정</button></td>       
+                     <td><button type="button" class="btn btn-outline-danger btn-sm edit" onclick="deleteReview('${review['id']}', '${review['title']}', '${review['review']}')">삭제</button></td></tr>`
+                   $("#review_list").append(review_list_html);
 }
 
-function updateReview(id, title, contents) {
-    let fix = prompt("수정할 내용을 입력해주세요!\n\n기존 내용\n["+contents+"]")
 
-    if(fix == null || fix === '')
+function updateReview(id, title, contents) {
+    let fix = prompt("수정할 내용을 입력해주세요!\n\n기존 내용\n[" + contents + "]")
+
+    if (fix == null || fix === '')
         return
     $.ajax({
         type: "post",
         url: `api/update-review`,
-        data: {id: id,title: title , review: contents, fix: fix},
+        data: {id: id, title: title, review: contents, fix: fix},
         success: function (response) { // 성공하면
             if (response["result"] === "success") {
                 alert("수정 완료!");
                 getReviews()
-            } else if(response["result"] === "fail"){
+            } else if (response["result"] === "fail") {
                 alert("다른 사람의 리뷰는 수정할 수 없습니다!")
             } else {
                 alert("서버 오류!");
