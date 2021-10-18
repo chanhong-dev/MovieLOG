@@ -102,6 +102,12 @@ def delete_post():
 
     return {"result": "삭제완료"}
 
+@application.route('/api/review-p', methods=['GET'])
+def get_review():
+    idx = request.args['idx']
+    article = db.moviereview.find_one({'idx': int(idx)}, {'_id': False})
+    return jsonify({"article": article})
+
 
 @application.route('/api/confirm-like', methods=['GET'])
 def get_like():

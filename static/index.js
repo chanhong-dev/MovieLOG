@@ -140,7 +140,7 @@ function makeReviewList(review) {
 function deleteArticle() {
     $.ajax({
         type: "DELETE",
-        url: `/reviewss`,
+        url: `/reviews-d`,
         data: {title: title, review: review},
         success: function (response) { // 성공하면
             if (response["result"] == "success") {
@@ -415,5 +415,4 @@ function makeBookmark(title, link) {
                                   onclick="delete_bookmark('${title}')">삭제</span>
                         </li>`
 
-    $("#bookmark-list").append(bookmark_html);
-}
+    $("#bookmark-list").append(bookmark_html);}
