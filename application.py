@@ -14,11 +14,6 @@ import user_validation as validation
 
 application = Flask(__name__)
 
-# 테스트 로컬
-# client = MongoClient('localhost', 27017)
-# client_id = "5Dvd8sOK7To6qEiPRBT9"
-# client_pw = "gNJwKPtZyX"
-# SECRET_KEY = 'SPARTA'
 
 # user_validation.py db경로도 바꿔주어야 함.
 
